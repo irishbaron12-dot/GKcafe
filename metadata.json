@@ -1,0 +1,6 @@
+{
+  "name": "GK Cafe by Primo",
+  "description": "Premium cafe and catering service website featuring an elegant coffee-brown theme, interactive dual-role ordering system, event appointment bookings, and admin control desk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

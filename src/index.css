@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+@theme {
+  --font-serif: "Playfair Display", serif;
+  --font-sans: "Plus Jakarta Sans", sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+  
+  --color-brand-beige: #efebe9;
+  --color-brand-coffee: #5c4033;
+  --color-brand-cream: #faf6f0;
+  --color-brand-gold: #c4a484;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #ffffff;
+  color: #5c4033;
+}
+
+h1, h2, h3, h4, h5, h6, .brand-font-serif {
+  font-family: var(--font-serif);
+  color: #5c4033;
+}
+

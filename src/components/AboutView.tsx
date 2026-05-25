@@ -34,7 +34,7 @@ export default function AboutView() {
             <span className="italic font-light">GK Cafe by Primo</span>
           </h2>
           <p className="text-sm text-[#5c4033] leading-relaxed font-medium">
-            GK Cafe by Primo started after the owner graduated from CMDI in the school year 2022. After graduation, he built a small canteen that served students and teachers with utmost dedication. Because of the exceptional quality of food and drinks offered, the business gradually expanded through passionate word-of-mouth and customer loyalty.
+            GK Cafe by Primo started after the owner graduated from CMDI in the school year 2023. After graduation, he built a small canteen that served students and teachers with utmost dedication. Because of the exceptional quality of food and drinks offered, the business gradually expanded through passionate word-of-mouth and customer loyalty.
           </p>
           <p className="text-sm text-zinc-550 leading-relaxed">
             Today, GK Cafe by Primo proudly accepts specialized food preparation and bulk party deliveries for all kinds of landmark events such as birthdays, weddings, seminars, corporate sessions, and family gatherings. From our humble canteen roots, we have blossomed into Los Baños' premier culinary destination, seamlessly combining Batangas Barako original coffee, Filipino delicacies, express home food delivery, and high-quality party platter preparation designed around your dream milestones.
@@ -206,7 +206,7 @@ export default function AboutView() {
               <span className="text-[9px] font-black tracking-widest text-[#8c6239] uppercase block mb-1">GK CAFE SOULS</span>
               <h4 className="text-xs font-black text-[#5c4033]">The Hearts Behind GK Cafe</h4>
               <p className="text-[10px] text-[#8c6239]/90 mt-1 font-medium italic">
-                {storyPhoto ? "Founders of GK Cafe by Primo — Dressed in Traditional Barong & Filipiniana" : "CMDI Graduates class of 2022"}
+                {storyPhoto ? "Founders of GK Cafe by Primo — Dressed in Traditional Barong & Filipiniana" : "CMDI Graduates class of 2023"}
               </p>
             </div>
           </div>
@@ -261,7 +261,7 @@ export default function AboutView() {
           </div>
           <div>
             <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Main Headquarters Location</p>
-            <p className="text-xs font-bold text-[#2d1b10]">Brgy. Maahas, Los Baños, Laguna, Philippines</p>
+            <p className="text-xs font-bold text-[#2d1b10]">Purok 3 Brgy Tranca Bay Laguna</p>
           </div>
         </div>
 
@@ -281,7 +281,7 @@ export default function AboutView() {
           </div>
           <div>
             <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Hotline & Delivery Inquiries</p>
-            <p className="text-xs font-bold text-[#2d1b10]">+63 917 123 4567 • (02) 8888 7777</p>
+            <p className="text-xs font-bold text-[#2d1b10]">09176334053</p>
           </div>
         </div>
       </div>

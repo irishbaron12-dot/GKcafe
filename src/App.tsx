@@ -875,9 +875,9 @@ export default function App() {
           {/* Contact coordinates */}
           <div className="space-y-3 font-semibold text-xs text-stone-400">
             <p className="text-[10px] font-black uppercase tracking-widest text-white">Central Advisors Point</p>
-            <p>📍 Brgy. Maahas, Los Baños, Laguna, Philippines</p>
-            <p>📞 +63 917 123 4567 • (02) 8888 7777</p>
-            <p>✉ hello@gkcafe.com</p>
+            <p>📍 Purok 3 Brgy Tranca, Bay, Laguna</p>
+            <p>📞 09176334053</p>
+            <p>✉ gkcafe@gmail.com</p>
           </div>
 
         </div>

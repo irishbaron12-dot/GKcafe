@@ -119,7 +119,7 @@ export default function ContactView() {
                 <MapPin className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Physical HQ Boulevard Address</p>
-                  <p className="text-zinc-550 mt-1">Brgy. Maahas, Los Baños, Laguna, Philippines</p>
+                  <p className="text-zinc-550 mt-1">Purok 3 Brgy Tranca, Bay, Laguna</p>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ export default function ContactView() {
                 <Phone className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Banquets & Delivery Hotlines</p>
-                  <p className="text-[#8c6239] mt-1">+63 917 123 4567 • (02) 8888 7777</p>
+                  <p className="text-[#8c6239] mt-1">09176334053</p>
                 </div>
               </div>
 
@@ -135,7 +135,7 @@ export default function ContactView() {
                 <Mail className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Corporate Email Address</p>
-                  <p className="text-zinc-550 mt-0.5">hello@gkcafe.com • catering@gkcafe.com</p>
+                  <p className="text-zinc-550 mt-0.5">gkcafe@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -162,7 +162,7 @@ export default function ContactView() {
             <div className="flex-1 rounded-2xl overflow-hidden relative border border-[#eadaaf]">
               <iframe
                 title="GK Cafe by Primo Location Map"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3867.7475153202534!2d121.2427845!3d14.1755919!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x33bd612ec9f44db7%3A0xc6cb1c7df768cf38!2sMaahas%2C%20Los%20Ba%c3%b1os%2C%20Laguna%2C%20Philippines!5e0!3m2!1sen!2sph!4v1716336000000!5m2!1sen!2sph"
+                src="https://maps.google.com/maps?q=Purok%203%20Brgy%20Tranca%20Bay%20Laguna&t=&z=14&ie=UTF8&iwloc=&output=embed"
                 className="w-full h-full border-0 rounded-2xl"
                 allowFullScreen={true}
                 loading="lazy"
@@ -171,7 +171,7 @@ export default function ContactView() {
             </div>
             <div className="flex justify-between items-center px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#8c6239]">
               <span>📍 Google Map Interactive</span>
-              <span className="text-zinc-500 text-[9px] font-mono">Brgy. Maahas, Los Baños</span>
+              <span className="text-zinc-500 text-[9px] font-mono">Purok 3 Brgy Tranca, Bay, Laguna</span>
             </div>
           </div>
 

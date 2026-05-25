@@ -4,7 +4,7 @@
  */
 
 import React, { useState } from 'react';
-import { Coffee, ShoppingBag, Bell, Menu, X, User, ShieldAlert, ClipboardList } from 'lucide-react';
+import { Coffee, ShoppingBag, Bell, Menu, X, User, ShieldAlert, ClipboardList, Search } from 'lucide-react';
 import { User as UserType, AppNotification } from '../types';
 
 interface NavbarProps {
@@ -17,6 +17,8 @@ interface NavbarProps {
   onOpenAuth: () => void;
   notifications: AppNotification[];
   onMarkNotificationAsRead: (id: string) => void;
+  searchQuery: string;
+  setSearchQuery: (query: string) => void;
 }
 
 export default function Navbar({
@@ -28,7 +30,9 @@ export default function Navbar({
   onOpenCart,
   onOpenAuth,
   notifications,
-  onMarkNotificationAsRead
+  onMarkNotificationAsRead,
+  searchQuery,
+  setSearchQuery
 }: NavbarProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
@@ -107,6 +111,8 @@ export default function Navbar({
               </button>
             )}
           </div>
+
+
 
           {/* Cart, Notifications, Auth actions */}
           <div className="hidden md:flex items-center space-x-4">
@@ -317,6 +323,8 @@ export default function Navbar({
       {mobileMenuOpen && (
         <div className="md:hidden animate-fade-in bg-white border-b border-[#e3dcd5]">
           <div className="px-4 pt-3 pb-6 space-y-3">
+
+
             {navItems.map((item) => (
               <button
                 key={item.id}

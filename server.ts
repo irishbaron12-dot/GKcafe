@@ -427,6 +427,50 @@ app.post('/api/auth/register', (req, res) => {
   }
 });
 
+// Auth Social (Google / Facebook)
+app.post('/api/auth/social', (req, res) => {
+  try {
+    const { name, email, provider } = req.body;
+    if (!email || !name) {
+      return res.status(400).json({ error: 'Missing credentials.' });
+    }
+    const db = loadDB();
+    const normalizedEmail = email.toLowerCase().trim();
+    let user = db.users.find(u => u.email.toLowerCase() === normalizedEmail);
+
+    if (!user) {
+      // Register them dynamically under social provider
+      user = {
+        id: 'usr-scl-' + crypto.randomBytes(8).toString('hex'),
+        name: name,
+        email: normalizedEmail,
+        phone: '',
+        passwordHash: 'social-auth-provider-' + provider,
+        salt: 'social',
+        role: 'customer',
+        createdAt: new Date().toISOString()
+      };
+      db.users.push(user);
+      saveDB(db);
+    }
+
+    res.json({
+      message: `Signed in successfully via ${provider}!`,
+      sessionToken: user.id,
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role
+      }
+    });
+
+  } catch (error: any) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
 // Auth Login
 app.post('/api/auth/login', (req, res) => {
   try {

@@ -34,6 +34,7 @@ import {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState<string>('home');
+  const [searchQuery, setSearchQuery] = useState<string>('');
   const [currentUser, setCurrentUser] = useState<any>(null);
   const [authToken, setAuthToken] = useState<string | null>(null);
 
@@ -471,6 +472,8 @@ export default function App() {
         onOpenAuth={() => setIsAuthOpen(true)}
         notifications={notifications}
         onMarkNotificationAsRead={handleMarkAsRead}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
       />
 
       {/* Dynamic Global Bulletin Announcement from Command Center */}
@@ -703,6 +706,8 @@ export default function App() {
                   document.getElementById('banquet-calendar-panel')?.scrollIntoView({ behavior: 'smooth' });
                 }, 150);
               }}
+              searchQuery={searchQuery}
+              setSearchQuery={setSearchQuery}
             />
 
             {/* Dynamic Event Booking Scheduler Anchor */}
@@ -886,7 +891,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] text-stone-500 font-bold uppercase tracking-wider gap-4">
           <span>📅 Office Operations: 07:00 AM — 10:00 PM Daily</span>
           <div className="flex space-x-4">
-            <span>© 2026 Primo Group of Restaurants</span>
+            <span>© 2023 GK Cafe By Primo</span>
             <span>•</span>
             <span>All rights reserved</span>
           </div>

@@ -253,7 +253,7 @@ export default function BookingForm({
             disabled={isSubmitting}
             className="w-full py-4 rounded-xl bg-[#2d1b10] text-[#faf6f0] text-xs font-bold uppercase tracking-widest hover:bg-[#8c6239] transition-all cursor-pointer shadow-sm disabled:opacity-60"
           >
-            {isSubmitting ? 'TRANSMITTING REQUEST DETAILS...' : 'CONFIRM & SUBMIT TO PRIME DEPT.'}
+            {isSubmitting ? 'TRANSMITTING REQUEST DETAILS...' : 'Confirm & Submit to Admin'}
           </button>
         ) : (
           <button

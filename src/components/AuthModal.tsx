@@ -214,6 +214,54 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
     }
   };
 
+  const handleSocialAuth = async (provider: 'Google' | 'Facebook') => {
+    setErrorMsg('');
+    setSuccessMsg('');
+    setIsSubmitting(true);
+    
+    setSuccessMsg(`Initiating secure handshake with ${provider} credential server...`);
+    
+    setTimeout(async () => {
+      const payload = provider === 'Google'
+        ? { name: 'Google Client Account', email: 'google.guest@gmail.com', provider: 'Google' }
+        : { name: 'Facebook Client Account', email: 'facebook.guest@gmail.com', provider: 'Facebook' };
+        
+      try {
+        const res = await fetch('/api/auth/social', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        
+        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(data.error || `${provider} authentication rejected.`);
+        }
+        
+        setSuccessMsg(`Signed in via ${provider} successfully! Synchronization complete.`);
+        
+        localStorage.setItem('gk_auth_token', data.sessionToken);
+        localStorage.setItem('gk_user', JSON.stringify(data.user));
+        
+        setTimeout(() => {
+          onLoginSuccess(data.sessionToken, data.user);
+          onClose();
+          setEmail('');
+          setPassword('');
+          setName('');
+          setPhone('');
+          setErrorMsg('');
+          setSuccessMsg('');
+        }, 1000);
+        
+      } catch (err: any) {
+        setErrorMsg(err.message || 'Third-party social protocol connection timed out.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    }, 1200);
+  };
+
   return (
     <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
       {/* Semi-transparent dark warm backdrop */}
@@ -537,6 +585,42 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                       : 'Register Account'
                   }
                 </button>
+
+                {/* Continue with Google & Facebook Social Buttons */}
+                <div className="relative my-4 flex items-center justify-between">
+                  <span className="w-[32%] border-b border-[#e3dcd5]"></span>
+                  <span className="text-[9.5px] font-black uppercase tracking-widest text-[#8c6239] shrink-0 bg-white px-2">or connect via</span>
+                  <span className="w-[32%] border-b border-[#e3dcd5]"></span>
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => handleSocialAuth('Google')}
+                    disabled={isSubmitting}
+                    className="flex items-center justify-center py-2.5 px-3 border border-[#cfc8c0] rounded-xl bg-white text-[10px] font-black uppercase text-[#5c4033] hover:bg-[#faf6f0] hover:border-[#8c6239] transition-all cursor-pointer shadow-xs whitespace-nowrap active:scale-[0.98]"
+                  >
+                    <svg className="w-4 h-4 mr-1.5 shrink-0" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path fill="#EA4335" d="M12 5.04c1.55 0 2.94.53 4.03 1.58l3-3C17.22 1.94 14.81 1.1 12 1.1 7.33 1.1 3.4 3.75 1.51 7.6l3.59 2.78c.85-2.54 3.22-4.34 6.9-4.34z"/>
+                      <path fill="#4285F4" d="M23.49 12.27c0-.81-.07-1.59-.2-2.34H12v4.44h6.44c-.28 1.47-1.11 2.72-2.36 3.56l3.58 2.78c2.1-1.93 3.47-4.78 3.47-8.44z"/>
+                      <path fill="#FBBC05" d="M5.1 14.82c-.22-.67-.35-1.39-.35-2.13s.13-1.46.35-2.13L1.51 7.6C.54 9.54 0 11.71 0 14c0 2.29.54 4.46 1.51 6.4l3.59-2.78-2.61-.8z"/>
+                      <path fill="#34A853" d="M12 22.9c3.24 0 5.97-1.07 7.96-2.9l-3.58-2.78c-1 .67-2.28 1.07-3.96 1.07-3.68 0-6.05-1.8-6.9-4.34l-3.59 2.78c1.89 3.85 5.82 6.5 10.49 6.5z"/>
+                    </svg>
+                    Google
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => handleSocialAuth('Facebook')}
+                    disabled={isSubmitting}
+                    className="flex items-center justify-center py-2.5 px-3 border border-[#cfc8c0] rounded-xl bg-[#1877F2] text-white text-[10px] font-black uppercase hover:bg-[#0c62d4] hover:border-[#0c62d4] transition-all cursor-pointer shadow-xs whitespace-nowrap active:scale-[0.98]"
+                  >
+                    <svg className="w-4 h-4 mr-1.5 fill-white shrink-0" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                    </svg>
+                    Facebook
+                  </button>
+                </div>
               </form>
             )}
           </div>

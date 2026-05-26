@@ -239,12 +239,12 @@ export default function AboutView() {
         </div>
 
         {/* Core Values */}
-        <div className="p-8 rounded-3xl bg-[#2d1b10] text-[#faf6f0] space-y-4">
-          <div className="w-10 h-10 bg-[#c4a484] text-[#2d1b10] rounded-xl flex items-center justify-center font-bold">
+        <div className="p-8 rounded-3xl bg-[#faf6f0] border border-[#e3dcd5] space-y-4">
+          <div className="w-10 h-10 bg-[#8c6239] text-white rounded-xl flex items-center justify-center font-bold">
             <Heart className="w-5 h-5" />
           </div>
-          <h4 className="text-lg font-serif font-extrabold text-amber-200">Our Core Principles</h4>
-          <ul className="text-xs space-y-1.5 opacity-90 leading-relaxed font-bold">
+          <h4 className="text-lg font-serif font-extrabold text-[#2d1b10]">Our Core Principles</h4>
+          <ul className="text-xs space-y-1.5 text-[#5c4033] leading-relaxed font-bold">
             <li>✓ Sustainable Direct Farm Sourcing</li>
             <li>✓ Uncompromising Culinary Quality</li>
             <li>✓ Genuine Filipino Hospitality</li>
@@ -260,7 +260,7 @@ export default function AboutView() {
             <MapPin className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Main Headquarters Location</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Main Headquarters Location</p>
             <p className="text-xs font-bold text-[#2d1b10]">Purok 3 Brgy Tranca Bay Laguna</p>
           </div>
         </div>
@@ -270,8 +270,8 @@ export default function AboutView() {
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Store Operations Hours</p>
-            <p className="text-xs font-bold text-[#2d1b10]">07:00 AM — 10:00 PM Daily</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Store Operations Hours</p>
+            <p className="text-xs font-bold text-[#2d1b10]">06:00 AM — 07:00 PM Daily</p>
           </div>
         </div>
 
@@ -280,7 +280,7 @@ export default function AboutView() {
             <Phone className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider">Hotline & Delivery Inquiries</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Hotline & Delivery Inquiries</p>
             <p className="text-xs font-bold text-[#2d1b10]">09176334053</p>
           </div>
         </div>

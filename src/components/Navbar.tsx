@@ -61,18 +61,10 @@ export default function Navbar({
             <button 
               id="nav-logo-btn"
               onClick={() => handleNavClick('home')} 
-              className="flex items-center space-x-2 text-left bg-transparent border-0 cursor-pointer focus:outline-none"
+              className="flex items-center text-left bg-transparent border-0 cursor-pointer focus:outline-none"
             >
               <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#5c4033] text-white">
                 <Coffee className="w-6 h-6 animate-pulse" />
-              </div>
-              <div>
-                <span className="block text-lg font-extrabold tracking-tight text-[#2d1b10]">
-                  GK CAFE
-                </span>
-                <span className="block text-[10px] font-bold tracking-widest text-[#8c6239] uppercase">
-                  by Primo
-                </span>
               </div>
             </button>
           </div>

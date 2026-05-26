@@ -326,7 +326,7 @@ export default function AdminDashboard({
             LIVE CAFE OPERATIONAL COMMAND
           </span>
           <h2 className="text-2xl sm:text-3xl font-serif font-black text-[#2d1b10] mt-1 leading-tight">
-            Chef Primo's Command Center
+            Primo Station
           </h2>
           <p className="text-xs text-zinc-500 font-semibold mt-1 max-w-2xl leading-relaxed">
             Analyze revenue stats, dispatch orders, approve dine-in bookings, and curate canteen menus.
@@ -2168,15 +2168,13 @@ export default function AdminDashboard({
                       <div className="relative w-56 h-56 select-none">
                         <svg className="w-full h-full transform" viewBox="0 0 100 100">
                           {/* Inner Neutral Background Ring */}
-                          <circle cx="50" cy="50" r={radius} fill="transparent" stroke="#fcfbf9" strokeWidth="9" />
-                          
-                          {/* Segment 1: Success Dispatch (Orange/Brown) */}
+                                {/* Segment 1: Success Dispatch (Rich Dark Brown) */}
                           <motion.circle 
                             cx="50" 
                             cy="50" 
                             r={radius} 
                             fill="transparent" 
-                            stroke="#e67e22" 
+                            stroke="#5c4033" 
                             strokeWidth={hoveredPieSegment === 'success' ? 12 : 9} 
                             strokeDasharray={circumference}
                             initial={{ strokeDashoffset: circumference }}
@@ -2191,13 +2189,13 @@ export default function AdminDashboard({
                             className="transition-all duration-300 cursor-pointer"
                           />
 
-                          {/* Segment 2: Orders Queue (Teal) */}
+                          {/* Segment 2: Orders Queue (Warm Sand/Terracotta Brown) */}
                           <motion.circle 
                             cx="50" 
                             cy="50" 
                             r={radius} 
                             fill="transparent" 
-                            stroke="#0d9488" 
+                            stroke="#8c6239" 
                             strokeWidth={hoveredPieSegment === 'queue' ? 12 : 9} 
                             strokeDasharray={circumference}
                             initial={{ strokeDashoffset: circumference }}
@@ -2212,13 +2210,13 @@ export default function AdminDashboard({
                             className="transition-all duration-300 cursor-pointer"
                           />
 
-                          {/* Segment 3: Catering Appointments (Indigo/Blue) */}
+                          {/* Segment 3: Catering Appointments (Radiant Ochre/Gold) */}
                           <motion.circle 
                             cx="50" 
                             cy="50" 
                             r={radius} 
                             fill="transparent" 
-                            stroke="#4f46e5" 
+                            stroke="#ca8a04" 
                             strokeWidth={hoveredPieSegment === 'catering' ? 12 : 9} 
                             strokeDasharray={circumference}
                             initial={{ strokeDashoffset: circumference }}
@@ -2318,7 +2316,7 @@ export default function AdminDashboard({
                       <div className="border border-stone-200 rounded-2xl p-4.5 space-y-2.5">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-2">
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#e67e22]" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-[#5c4033]" />
                             <span className="text-stone-800 font-extrabold text-xs">Success Dispatch Orders</span>
                           </div>
                           <span className="text-stone-800 font-extrabold text-xs">
@@ -2329,7 +2327,7 @@ export default function AdminDashboard({
                         {/* Progress Bar */}
                         <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
                           <div 
-                            className="bg-[#e67e22] h-full rounded-full transition-all duration-300" 
+                            className="bg-[#5c4033] h-full rounded-full transition-all duration-300" 
                             style={{ width: `${pctSuccess}%` }} 
                           />
                         </div>
@@ -2346,7 +2344,7 @@ export default function AdminDashboard({
                       <div className="border border-stone-200 rounded-2xl p-4.5 space-y-2.5">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-2">
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#0d9488]" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-[#8c6239]" />
                             <span className="text-stone-800 font-extrabold text-xs">Orders Queue</span>
                           </div>
                           <span className="text-stone-800 font-extrabold text-xs">
@@ -2357,7 +2355,7 @@ export default function AdminDashboard({
                         {/* Progress Bar */}
                         <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
                           <div 
-                            className="bg-[#0d9488] h-full rounded-full transition-all duration-300" 
+                            className="bg-[#8c6239] h-full rounded-full transition-all duration-300" 
                             style={{ width: `${pctQueue}%` }} 
                           />
                         </div>
@@ -2374,7 +2372,7 @@ export default function AdminDashboard({
                       <div className="border border-stone-200 rounded-2xl p-4.5 space-y-2.5">
                         <div className="flex justify-between items-center">
                           <div className="flex items-center space-x-2">
-                            <span className="h-2.5 w-2.5 rounded-full bg-[#4f46e5]" />
+                            <span className="h-2.5 w-2.5 rounded-full bg-[#ca8a04]" />
                             <span className="text-stone-800 font-extrabold text-xs">Catering Appointments</span>
                           </div>
                           <span className="text-stone-800 font-extrabold text-xs">
@@ -2385,7 +2383,7 @@ export default function AdminDashboard({
                         {/* Progress Bar */}
                         <div className="w-full bg-stone-100 rounded-full h-1.5 overflow-hidden">
                           <div 
-                            className="bg-[#4f46e5] h-full rounded-full transition-all duration-300" 
+                            className="bg-[#ca8a04] h-full rounded-full transition-all duration-300" 
                             style={{ width: `${pctCatering}%` }} 
                           />
                         </div>

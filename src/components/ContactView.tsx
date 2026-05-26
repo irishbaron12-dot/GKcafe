@@ -119,7 +119,7 @@ export default function ContactView() {
                 <MapPin className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Physical HQ Boulevard Address</p>
-                  <p className="text-zinc-550 mt-1">Purok 3 Brgy Tranca, Bay, Laguna</p>
+                  <p className="text-[#5c4033] font-bold mt-1">Purok 3 Brgy Tranca, Bay, Laguna</p>
                 </div>
               </div>
 
@@ -127,7 +127,7 @@ export default function ContactView() {
                 <Phone className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Banquets & Delivery Hotlines</p>
-                  <p className="text-[#8c6239] mt-1">09176334053</p>
+                  <p className="text-[#5c4033] font-extrabold mt-1">09176334053</p>
                 </div>
               </div>
 
@@ -135,7 +135,7 @@ export default function ContactView() {
                 <Mail className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
                   <p className="font-extrabold text-[#2d1b10]">Corporate Email Address</p>
-                  <p className="text-zinc-550 mt-0.5">gkcafe@gmail.com</p>
+                  <p className="text-[#5c4033] font-bold mt-0.5">gkcafe@gmail.com</p>
                 </div>
               </div>
             </div>
@@ -171,7 +171,7 @@ export default function ContactView() {
             </div>
             <div className="flex justify-between items-center px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-[#8c6239]">
               <span>📍 Google Map Interactive</span>
-              <span className="text-zinc-500 text-[9px] font-mono">Purok 3 Brgy Tranca, Bay, Laguna</span>
+              <span className="text-[#5c4033] text-[9px] font-mono">Purok 3 Brgy Tranca, Bay, Laguna</span>
             </div>
           </div>
 

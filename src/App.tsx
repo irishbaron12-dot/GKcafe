@@ -838,48 +838,37 @@ export default function App() {
 
       {/* 4. Global Themed Footer */}
       <footer className="bg-[#faf6f0] text-[#5c4033] border-t border-[#e3dcd5] pt-12 pb-6">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 pb-10 border-b border-[#e3dcd5]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-3 gap-8 pb-10 border-b border-[#e3dcd5]">
           
           {/* Brand col */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-9 h-9 rounded-lg bg-[#8c6239] text-white flex items-center justify-center font-black">
+              <div className="w-9 h-9 rounded-lg bg-[#2d1b10] text-[#faf6f0] flex items-center justify-center font-black">
                 GK
               </div>
               <div>
-                <span className="block text-sm font-extrabold tracking-widest text-[#faf6f0]">GK CAFE</span>
-                <span className="block text-[9px] font-bold tracking-widest text-amber-200 uppercase">BY PRIMO</span>
+                <span className="block text-sm font-extrabold tracking-widest text-[#2d1b10]">GK CAFE</span>
+                <span className="block text-[9px] font-bold tracking-widest text-[#8c6239] uppercase">BY PRIMO</span>
               </div>
             </div>
-            <p className="text-[11px] text-stone-400 leading-relaxed font-semibold">
+            <p className="text-[11px] text-[#5c4033] leading-relaxed font-semibold">
               Combining original Batangas Barako coffee, homemade Filipino delicacies, express home deliveries, and luxurious catering layouts designed for your dream milestones.
             </p>
           </div>
 
           {/* Links 1 */}
           <div className="space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">Products & Services</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#5c4033]">Products & Services</p>
             <ul className="text-xs space-y-1.5 font-bold">
-              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">☕ Premium Coffee Lists</button></li>
-              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">🍱 Filipino Bilaos</button></li>
-              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">🏆 Executive Cateringブルー</button></li>
-              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">🍳 Online Hot Food Delivery</button></li>
-            </ul>
-          </div>
-
-          {/* Links 2 */}
-          <div className="space-y-3">
-            <p className="text-[10px] font-black uppercase tracking-widest text-stone-400">Cafe Portals & Help</p>
-            <ul className="text-xs space-y-1.5 font-bold">
-              <li><button onClick={() => setIsAuthOpen(true)} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">🔐 Customer Gate</button></li>
-              <li><button onClick={() => { setActiveTab('contact'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">📅 Banquet Advisors</button></li>
-              <li><button onClick={() => { setActiveTab('about'); }} className="hover:text-amber-200 text-left bg-transparent border-0 cursor-pointer">🥇 Our Sourcing Heritage</button></li>
+              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-[#8c6239] text-[#5c4033] text-left bg-transparent border-0 cursor-pointer">☕ Premium Coffee Lists</button></li>
+              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-[#8c6239] text-[#5c4033] text-left bg-transparent border-0 cursor-pointer">🍱 Filipino Bilaos</button></li>
+              <li><button onClick={() => { setActiveTab('menu'); }} className="hover:text-[#8c6239] text-[#5c4033] text-left bg-transparent border-0 cursor-pointer">🍳 Online Hot Food Delivery</button></li>
             </ul>
           </div>
 
           {/* Contact coordinates */}
-          <div className="space-y-3 font-semibold text-xs text-stone-400">
-            <p className="text-[10px] font-black uppercase tracking-widest text-white">Central Advisors Point</p>
+          <div className="space-y-3 font-semibold text-xs text-[#5c4033]">
+            <p className="text-[10px] font-black uppercase tracking-widest text-[#5c4033]">Central Advisors Point</p>
             <p>📍 Purok 3 Brgy Tranca, Bay, Laguna</p>
             <p>📞 09176334053</p>
             <p>✉ gkcafe@gmail.com</p>
@@ -889,7 +878,7 @@ export default function App() {
 
         {/* Tiny foot line */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] text-stone-500 font-bold uppercase tracking-wider gap-4">
-          <span>📅 Office Operations: 07:00 AM — 10:00 PM Daily</span>
+          <span>📅 Office Operations: 06:00 AM — 07:00 PM Daily</span>
           <div className="flex space-x-4">
             <span>© 2023 GK Cafe By Primo</span>
             <span>•</span>

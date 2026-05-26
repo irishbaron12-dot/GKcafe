@@ -30,11 +30,15 @@ export default function Hero({ onOrderNow, onBookCatering }: HeroProps) {
               </span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-[#5c4033] leading-tight tracking-tight">
-              Savor the Perfect Blend of <span className="text-[#8c6239] relative">Café Culture</span> & Traditional <span className="italic select-none text-[#8c6239]">Bilaos</span>
+            <h1 className="text-[44px] sm:text-6xl lg:text-[76px] font-black text-[#5c4033] leading-none tracking-tight">
+              GK Cafe <span className="text-[#8c6239] font-serif italic font-normal block lg:inline-block mt-1 lg:mt-0">by Primo</span>
             </h1>
 
-            <p className="text-sm sm:text-base text-[#8c6239] max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
+            <p className="text-sm sm:text-base text-[#8c6239] max-w-xl mx-auto lg:mx-0 font-bold leading-relaxed tracking-wide">
+              Savor the perfect blend of café culture and traditional bilaos.
+            </p>
+
+            <p className="text-xs sm:text-sm text-stone-500 max-w-xl mx-auto lg:mx-0 font-medium leading-relaxed">
               GK Cafe by Primo seamlessly combines Batangas Barako original coffee, Filipino delicacies, home food delivery, and premium party food preparation and bulk deliveries for all your celebrations and events.
             </p>
 

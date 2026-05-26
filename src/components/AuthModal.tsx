@@ -103,7 +103,17 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         body: JSON.stringify(payload)
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const textText = await res.text();
+        if (!res.ok) {
+          throw new Error(textText.slice(0, 100) || `Server error with status ${res.status}`);
+        }
+      }
+
       if (!res.ok) {
         throw new Error(data.error || 'Identity portal verification failed.');
       }
@@ -184,7 +194,17 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         body: JSON.stringify({ email: presetEmail, password: presetPass })
       });
 
-      const data = await res.json();
+      let data: any = {};
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        const textText = await res.text();
+        if (!res.ok) {
+          throw new Error(textText.slice(0, 100) || `Server error with status ${res.status}`);
+        }
+      }
+
       if (!res.ok) {
         throw new Error(data.error || 'Identity portal verification failed.');
       }

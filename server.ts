@@ -231,7 +231,13 @@ interface DBStructure {
   notifications: any[];
 }
 
+let cachedDB: DBStructure | null = null;
+
 function loadDB(): DBStructure {
+  if (cachedDB) {
+    return cachedDB;
+  }
+
   const defaultUsers = [
     // Create preseeded administrator accounts:
     {
@@ -299,7 +305,12 @@ function loadDB(): DBStructure {
         }
       ]
     };
-    fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2), 'utf-8');
+    try {
+      fs.writeFileSync(DB_FILE, JSON.stringify(defaultData, null, 2), 'utf-8');
+    } catch (err) {
+      console.warn("Could not write db.json on setup (expected in read-only environment like Vercel):", err);
+    }
+    cachedDB = defaultData;
     return defaultData;
   }
 
@@ -317,13 +328,18 @@ function loadDB(): DBStructure {
     });
 
     if (changed) {
-      fs.writeFileSync(DB_FILE, JSON.stringify(parsedData, null, 2), 'utf-8');
+      try {
+        fs.writeFileSync(DB_FILE, JSON.stringify(parsedData, null, 2), 'utf-8');
+      } catch (err) {
+        console.warn("Could not update users in db.json (expected in read-only environment like Vercel):", err);
+      }
     }
 
+    cachedDB = parsedData;
     return parsedData;
   } catch (e) {
     console.error("Failed to parse db.json, generating backup...", e);
-    return {
+    const fallbackDB = {
       users: defaultUsers,
       menuItems: INITIAL_MENU,
       orders: [],
@@ -332,11 +348,18 @@ function loadDB(): DBStructure {
       faqs: INITIAL_FAQS,
       notifications: []
     } as any;
+    cachedDB = fallbackDB;
+    return fallbackDB;
   }
 }
 
 function saveDB(data: DBStructure) {
-  fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  cachedDB = data;
+  try {
+    fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (err) {
+    console.warn("Could not write to db.json on save (expected in read-only environment like Vercel):", err);
+  }
 }
 
 // Simple Native SHA-256 password utilities

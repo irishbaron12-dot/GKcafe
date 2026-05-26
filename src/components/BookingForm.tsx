@@ -192,7 +192,7 @@ export default function BookingForm({
                 </label>
                 <input
                   type="range"
-                  min="10"
+                  min="30"
                   max="500"
                   step="5"
                   value={guestCount}
@@ -200,7 +200,7 @@ export default function BookingForm({
                   className="w-full accent-[#8c6239] mt-2.5 cursor-pointer"
                 />
                 <div className="flex justify-between text-[9px] font-bold text-zinc-400 mt-1 uppercase tracking-wider">
-                  <span>10 Min Portions</span>
+                  <span>30 Min Portions</span>
                   <span>500 Max Bulk Quantity</span>
                 </div>
               </div>

@@ -487,11 +487,12 @@ export default function AdminDashboard({
                         </div>
 
                         {/* Order Items list preview */}
-                        <div className="text-[10px] text-stone-600 font-semibold bg-stone-50/50 p-2 rounded border border-stone-200/50">
+                        <div className="text-[10px] text-stone-600 font-semibold bg-stone-50/50 p-2.5 rounded border border-stone-200/50 space-y-1">
                           {o.items.map((it, idx) => (
-                            <span key={idx} className="inline-block mr-3">
-                              {it.name} <strong className="text-[#8c6239]">x{it.quantity}</strong>
-                            </span>
+                            <div key={idx} className="flex items-center">
+                              <span className="w-1.5 h-1.5 bg-stone-400 rounded-full mr-2 shrink-0"></span>
+                              <span>{it.name} <strong className="text-[#8c6239]">x{it.quantity}</strong></span>
+                            </div>
                           ))}
                         </div>
 

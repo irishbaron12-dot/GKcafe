@@ -6,6 +6,7 @@
 import React, { useState } from 'react';
 import { Coffee, ShoppingBag, Bell, Menu, X, User, ShieldAlert, ClipboardList, Search } from 'lucide-react';
 import { User as UserType, AppNotification } from '../types';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   activeTab: string;
@@ -39,6 +40,48 @@ export default function Navbar({
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
   const unreadNotifications = notifications.filter(n => !n.read);
+  const notificationRef = React.useRef<HTMLDivElement>(null);
+
+  // Automate notification read when viewed is active with a smooth delay
+  React.useEffect(() => {
+    if (showNotifications && unreadNotifications.length > 0) {
+      const timer = setTimeout(() => {
+        // Mark all currently unread notifications visible in the panel as read automatically
+        unreadNotifications.forEach(notif => {
+          onMarkNotificationAsRead(notif.id);
+        });
+      }, 2000); // 2-second viewing window before automatic clear
+      return () => clearTimeout(timer);
+    }
+  }, [showNotifications, unreadNotifications.length, onMarkNotificationAsRead]);
+
+  // Automatically bounce back/close notifications overlay after 4 seconds of viewing
+  React.useEffect(() => {
+    if (showNotifications) {
+      const timer = setTimeout(() => {
+        setShowNotifications(false);
+      }, 4000); // 4-second automatic bounce back
+      return () => clearTimeout(timer);
+    }
+  }, [showNotifications]);
+
+  // Click outside to close notifications overlay automatically (returns to notification bell)
+  React.useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
+        setShowNotifications(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // Close notifications overlay when page/tab changes (returns to the notification bell)
+  React.useEffect(() => {
+    setShowNotifications(false);
+  }, [activeTab]);
 
   const navItems = [
     { id: 'home', label: 'Home' },
@@ -109,7 +152,7 @@ export default function Navbar({
           {/* Cart, Notifications, Auth actions */}
           <div className="hidden md:flex items-center space-x-4">
             {/* Notification bell */}
-            <div className="relative">
+            <div className="relative" ref={notificationRef}>
               <button
                 id="bell-notif-btn"
                 onClick={() => setShowNotifications(!showNotifications)}
@@ -140,25 +183,41 @@ export default function Navbar({
                         No notifications yet.
                       </div>
                     ) : (
-                      notifications.map((notif) => (
-                        <div 
-                          key={notif.id} 
-                          className={`p-3 text-xs transition-colors ${notif.read ? 'bg-white' : 'bg-amber-50/50'}`}
-                        >
-                          <p className="text-[#3c2a1e] font-medium leading-relaxed">{notif.message}</p>
-                          <div className="mt-2 flex justify-between items-center text-[10px] text-zinc-400">
-                            <span>{new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
-                            {!notif.read && (
-                              <button
-                                onClick={() => onMarkNotificationAsRead(notif.id)}
-                                className="text-amber-800 hover:underline font-semibold bg-transparent border-0 cursor-pointer"
-                              >
-                                Mark Read
-                              </button>
-                            )}
+                      <div className="flex flex-col">
+                        {notifications.map((notif) => (
+                          <div 
+                            key={notif.id} 
+                            onClick={() => !notif.read && onMarkNotificationAsRead(notif.id)}
+                            className={`p-3.5 text-xs transition-all border-b border-zinc-100 last:border-0 ${
+                              notif.read 
+                                ? 'bg-white text-zinc-500' 
+                                : 'bg-amber-50/60 hover:bg-amber-50/90 text-[#3c2a1e] font-semibold cursor-pointer'
+                            }`}
+                            title={notif.read ? undefined : 'Click to mark as read'}
+                          >
+                            <div className="flex gap-2 items-start">
+                              {!notif.read && (
+                                <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-[#8c6239] shrink-0" />
+                              )}
+                              <div className="flex-1 min-w-0">
+                                <p className={`leading-relaxed ${notif.read ? 'text-zinc-500 font-normal' : 'text-[#3c2a1e] font-medium'}`}>
+                                  {notif.message}
+                                </p>
+                                <div className="mt-1.5 flex justify-between items-center text-[10px] text-zinc-400">
+                                  <span>{new Date(notif.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                  {notif.read ? (
+                                    <span className="text-zinc-300 italic font-normal text-[9px]">Read</span>
+                                  ) : (
+                                    <span className="text-amber-800 font-semibold hover:underline cursor-pointer">
+                                      Dismiss
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -169,11 +228,11 @@ export default function Navbar({
             <button
               id="cart-btn"
               onClick={onOpenCart}
-              className="p-2.5 rounded-xl text-[#5c4033] hover:bg-[#faf6f0] hover:text-[#8c6239] transition-colors relative"
+              className="p-1.5 rounded-xl text-[#8c6239] hover:bg-[#faf6f0] hover:text-[#5c4033] transition-colors relative"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-8 h-8 text-[#8c6239] stroke-[2.2]" />
               {cartCount > 0 && (
-                <span className="absolute top-1.5 right-1.5 w-4 h-4 bg-[#8c6239] rounded-full text-[10px] font-extrabold text-white flex items-center justify-center">
+                <span className="absolute -top-0.5 -right-0.5 w-5 h-5 bg-[#5c4033] rounded-full text-[10px] font-extrabold text-white flex items-center justify-center border-2 border-white shadow-xs animate-pulse">
                   {cartCount}
                 </span>
               )}
@@ -241,11 +300,11 @@ export default function Navbar({
           <div className="md:hidden flex items-center space-x-3">
             <button
               onClick={onOpenCart}
-              className="p-2 text-[#5c4033] relative"
+              className="p-1.5 text-[#8c6239] relative"
             >
-              <ShoppingBag className="w-5 h-5" />
+              <ShoppingBag className="w-7 h-7 text-[#8c6239] stroke-[2.2]" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-[#8c6239] rounded-full text-[9px] font-black text-white flex items-center justify-center">
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-[#5c4033] rounded-full text-[9px] font-black text-white flex items-center justify-center border-2 border-white animate-pulse">
                   {cartCount}
                 </span>
               )}
@@ -290,22 +349,38 @@ export default function Navbar({
             {notifications.length === 0 ? (
               <p className="text-[10px] text-zinc-400 py-2">No alerts yet.</p>
             ) : (
-              notifications.map(notif => (
-                <div key={notif.id} className="text-[11px] p-2 bg-white rounded-lg border border-[#e3dcd5] shadow-xs">
-                  <p className="text-[#3c2a1e]">{notif.message}</p>
-                  <div className="flex justify-between mt-1 text-[9px] text-[#8c6239]">
-                    <span>{new Date(notif.createdAt).toLocaleTimeString()}</span>
-                    {!notif.read && (
-                      <button 
-                        onClick={() => onMarkNotificationAsRead(notif.id)} 
-                        className="underline bg-transparent border-0 cursor-pointer font-bold"
-                      >
-                        Read
-                      </button>
-                    )}
+              <div className="space-y-2">
+                {notifications.map(notif => (
+                  <div 
+                    key={notif.id} 
+                    onClick={() => !notif.read && onMarkNotificationAsRead(notif.id)}
+                    className={`text-[11px] p-2.5 rounded-lg border transition-all ${
+                      notif.read 
+                        ? 'bg-zinc-50 border-zinc-200 text-zinc-600' 
+                        : 'bg-white border-[#8c6239]/30 shadow-xs text-[#3c2a1e] cursor-pointer hover:bg-amber-50/20'
+                    }`}
+                  >
+                    <div className="flex gap-1.5 items-start">
+                      {!notif.read && (
+                        <span className="mt-1 w-1.5 h-1.5 rounded-full bg-[#8c6239] shrink-0" />
+                      )}
+                      <div className="flex-1">
+                        <p className={notif.read ? 'text-zinc-500 font-normal shadow-none' : 'text-[#3c2a1e] font-bold'}>{notif.message}</p>
+                        <div className="flex justify-between mt-1 text-[9px] text-zinc-400">
+                          <span>{new Date(notif.createdAt).toLocaleTimeString()}</span>
+                          {notif.read ? (
+                            <span className="text-zinc-400 italic">Read</span>
+                          ) : (
+                            <span className="text-[#8c6239] font-bold underline">
+                              Dismiss
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
           </div>
         </div>

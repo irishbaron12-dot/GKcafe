@@ -59,7 +59,7 @@ export default function Hero({ onOrderNow, onBookCatering }: HeroProps) {
                 className="flex items-center justify-center space-x-2 px-7 py-4 rounded-xl bg-white text-[#5c4033] border-2 border-[#8c6239] text-sm font-bold tracking-wider hover:bg-[#faf6f0] transition-all cursor-pointer active:scale-98"
               >
                 <CalendarDays className="w-4 h-4 text-[#8c6239]" />
-                <span>BOOK EVENT FOOD PREP</span>
+                <span>BOOK EVENT</span>
               </button>
             </div>
 

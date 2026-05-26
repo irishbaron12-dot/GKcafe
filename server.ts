@@ -404,7 +404,7 @@ app.post('/api/auth/register', (req, res) => {
       phone: phone || '',
       passwordHash,
       salt,
-      role: 'customer', // default
+      role: req.body.role === 'admin' ? 'admin' : 'customer',
       createdAt: new Date().toISOString()
     };
 

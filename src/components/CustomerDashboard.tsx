@@ -322,9 +322,14 @@ export default function CustomerDashboard({
                                 {new Date(order.createdAt).toLocaleDateString()} at {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                               </span>
                             </div>
-                            <p className="text-xs text-[#5c4033] mt-3 font-bold leading-relaxed">
-                              {order.items.map(it => `${it.name} (${it.quantity}x)`).join(', ')}
-                            </p>
+                            <div className="mt-3 space-y-1">
+                              {order.items.map((it, idx) => (
+                                <p key={idx} className="text-xs text-[#5c4033] font-bold leading-relaxed flex items-center">
+                                  <span className="w-1.5 h-1.5 bg-[#8c6239] rounded-full mr-2 shrink-0"></span>
+                                  <span>{it.name} <span className="text-[#8c6239] font-black">({it.quantity}x)</span></span>
+                                </p>
+                              ))}
+                            </div>
                           </div>
 
                           <div className="text-right flex flex-col items-start md:items-end">
@@ -454,9 +459,14 @@ export default function CustomerDashboard({
                                 {new Date(order.createdAt).toLocaleDateString()}
                               </span>
                             </div>
-                            <p className="text-xs text-[#5c4033] mt-2 font-bold truncate max-w-sm sm:max-w-lg">
-                              {order.items.map(it => `${it.name} (${it.quantity}x)`).join(', ')}
-                            </p>
+                            <div className="mt-2 space-y-1">
+                              {order.items.map((it, idx) => (
+                                <p key={idx} className="text-xs text-[#5c4033] font-bold leading-relaxed flex items-center">
+                                  <span className="w-1.5 h-1.5 bg-stone-300 rounded-full mr-2 shrink-0"></span>
+                                  <span>{it.name} <span className="text-[#8c6239] font-black">({it.quantity}x)</span></span>
+                                </p>
+                              ))}
+                            </div>
                           </div>
 
                           <div className="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">

@@ -118,6 +118,21 @@ export default function App() {
     }
   }, [authToken, currentUser]);
 
+  // Real-time notification syncing: triggers on page navigation state changes and polls every 5 seconds in the background
+  useEffect(() => {
+    if (!authToken) return;
+
+    // Fetch on page selection shifts
+    fetchNotifications();
+
+    // Constant background short-polling for real-time order/booking updates
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 5000);
+
+    return () => clearInterval(interval);
+  }, [authToken, activeTab]);
+
   // Handle Toast autohide
   useEffect(() => {
     if (heroAlert) {
@@ -540,58 +555,6 @@ export default function App() {
                 }, 150);
               }}
             />
-
-            {/* Quick Promo Banner Bento Layout */}
-            <section className="bg-[#faf6f0] border-y border-[#e3dcd5] py-12">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                
-                <div className="lg:col-span-4 space-y-4">
-                  <span className="text-[10px] font-black tracking-widest text-[#8c6239] uppercase">GK FIESTA PLATTERS</span>
-                  <h3 className="text-2xl font-serif text-[#5c4033]">Celebrate over our traditional Filipino Bilaos</h3>
-                  <p className="text-xs text-[#8c6239] leading-relaxed font-semibold">
-                    Perfect for gatherings and milestones, our woven Bilaos feature fresh pancit, crunchy spring rolls, and authentic local Kakanin sweet matrices.
-                  </p>
-                  <button
-                    onClick={() => {
-                      setActiveTab('menu');
-                      setTimeout(() => {
-                        const btn = document.getElementById('menu-filter-btn-bilao');
-                        if (btn) btn.click();
-                      }, 100);
-                    }}
-                    className="flex items-center space-x-1 text-xs font-bold text-[#8c6239] hover:underline hover:translate-x-1 transition-all bg-transparent border-0 cursor-pointer"
-                  >
-                    <span>Browse Fiesta Platters Catalog</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div className="h-60 rounded-2xl overflow-hidden relative shadow-md">
-                    <img
-                      src="https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?q=30&w=600&auto=format&fit=crop"
-                      alt="Traditional Pancit Bilao"
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
-                    <span className="absolute bottom-4 left-4 text-[#faf6f0] text-xs font-black tracking-wider uppercase">FIESTA NOODLES PLATTER</span>
-                  </div>
-
-                  <div className="h-60 rounded-2xl overflow-hidden relative shadow-md">
-                    <img
-                      src="https://images.unsplash.com/photo-1514517604298-cf80e0fb7f1e?q=30&w=600&auto=format&fit=crop"
-                      alt="Fresh Kakanin treats"
-                      className="w-full h-full object-cover"
-                      referrerPolicy="no-referrer"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/70 to-transparent" />
-                    <span className="absolute bottom-4 left-4 text-[#faf6f0] text-xs font-black tracking-wider uppercase">LOCAL SWEET KAKANINS</span>
-                  </div>
-                </div>
-
-              </div>
-            </section>
 
             {/* Best Sellers segment */}
             <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

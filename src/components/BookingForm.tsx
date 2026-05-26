@@ -78,7 +78,7 @@ export default function BookingForm({
 
       setMessage({
         type: 'success',
-        text: `🎉 Request submitted successfully! Reservation code assigned. Our food preparation department will contact you at ${userPhone} to confirm your order details and provide a custom quotation.`
+        text: `🎉 Request submitted successfully! Reservation code assigned. Our Book Event core team will contact you at ${userPhone} to confirm your order details and provide a custom quotation.`
       });
 
       // Clear fields
@@ -86,7 +86,7 @@ export default function BookingForm({
       setNotes('');
       setSelectedPackageId('');
     } catch (err: any) {
-      setMessage({ type: 'error', text: err.message || 'Error scheduling food preparation.' });
+      setMessage({ type: 'error', text: err.message || 'Error scheduling Book Event.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -180,7 +180,7 @@ export default function BookingForm({
         {/* Dynamic Section corresponding to Booking category choice */}
         {bookingType === 'catering' ? (
           <div className="space-y-4 pt-4 border-t border-[#e3dcd5] animate-fade-in">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#8c6239]">Large Order Food Preparation Specs</h4>
+            <h4 className="text-xs font-bold uppercase tracking-wider text-[#8c6239]">Large Order Book Event Specs</h4>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               

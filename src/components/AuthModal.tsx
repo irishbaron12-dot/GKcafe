@@ -94,7 +94,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
     const endpoint = activeTab === 'login' ? '/api/auth/login' : '/api/auth/register';
     const payload = activeTab === 'login' 
       ? { email: email.trim(), password }
-      : { name: name.trim(), email: email.trim(), password, phone: phone.trim() };
+      : { name: name.trim(), email: email.trim(), password, phone: phone.trim(), role: selectedRole };
 
     try {
       const res = await fetch(endpoint, {
@@ -270,8 +270,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
         className="absolute inset-0 bg-[#5c4033]/45 backdrop-blur-xs transition-opacity duration-300"
       />
 
-      {/* Main Container - Two Columns Layout */}
-      <div className="bg-white rounded-3xl w-full max-w-4xl overflow-hidden relative border border-[#e3dcd5] shadow-2xl z-10 animate-fade-in flex flex-col md:flex-row min-h-[500px]">
+      {/* Main Container - Single Column Layout */}
+      <div className="bg-white rounded-3xl w-full max-w-md overflow-hidden relative border border-[#e3dcd5] shadow-2xl z-10 animate-fade-in flex flex-col p-6 sm:p-8 min-h-[480px]">
         
         {/* Modal close button */}
         <button
@@ -282,68 +282,8 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
           <X className="w-4 h-4" />
         </button>
 
-        {/* LEFT COLUMN: Select an Administrator Profile */}
-        <div className="w-full md:w-1/2 bg-[#faf6f0] p-6 sm:p-8 flex flex-col justify-between border-r border-[#e3dcd5]">
-          <div className="space-y-6">
-            <div>
-              <span className="text-[10px] font-black tracking-widest text-[#8c6239] uppercase">GK CAFE SECURITY DESK</span>
-              <h3 className="text-2xl font-serif font-black text-[#5c4033] mt-1">Admin Presets</h3>
-              <p className="text-xs text-[#8c6239] mt-2 leading-relaxed">
-                Pre-configured administrator profiles are loaded below. Click either button to authorize immediately and access active dispatch databases, menu manager, and bookings:
-              </p>
-            </div>
-
-            {/* Demo profile cards */}
-            <div className="space-y-3">
-              {/* Profile 1: Chef Admin */}
-              <button
-                type="button"
-                onClick={() => selectPreset('primo@canteen.com', 'admin123', 'admin')}
-                className="w-full text-left p-3.5 rounded-2xl bg-white border border-[#efebe9] hover:border-[#8c6239] hover:shadow-xs transition-all flex items-start space-x-4 cursor-pointer group"
-              >
-                <div className="p-2.5 rounded-xl bg-[#faf6f0] text-[#8c6239] group-hover:bg-[#8c6239] group-hover:text-white transition-all shrink-0">
-                  <Shield className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5 leading-snug">
-                  <p className="text-xs font-black text-[#5c4033]">Primo Chef Admin</p>
-                  <p className="text-[11px] text-[#8c6239]">Catered meals coordinator, kitchen orders & system planner.</p>
-                  <p className="text-[10px] font-mono text-stone-400 font-bold mt-1">
-                    Email: <span className="text-[#8c6239]">primo@canteen.com</span> | PW: <span className="text-[#8c6239]">admin123</span>
-                  </p>
-                </div>
-              </button>
-
-              {/* Profile 2: System Admin */}
-              <button
-                type="button"
-                onClick={() => selectPreset('admin@gkcafe.com', 'admin123', 'admin')}
-                className="w-full text-left p-3.5 rounded-2xl bg-white border border-[#efebe9] hover:border-[#8c6239] hover:shadow-xs transition-all flex items-start space-x-4 cursor-pointer group"
-              >
-                <div className="p-2.5 rounded-xl bg-[#faf6f0] text-[#8c6239] group-hover:bg-[#8c6239] group-hover:text-white transition-all shrink-0">
-                  <Shield className="w-4 h-4" />
-                </div>
-                <div className="space-y-0.5 leading-snug">
-                  <p className="text-xs font-black text-[#5c4033]">Primary Admin Portal</p>
-                  <p className="text-[11px] text-[#8c6239]">Global canteen controller and transaction dispatcher.</p>
-                  <p className="text-[10px] font-mono text-stone-400 font-bold mt-1">
-                    Email: <span className="text-[#8c6239]">admin@gkcafe.com</span> | PW: <span className="text-[#8c6239]">admin123</span>
-                  </p>
-                </div>
-              </button>
-            </div>
-          </div>
-
-          {/* Left bottom banner */}
-          <div className="mt-6 md:mt-0 p-3 bg-white/70 border border-[#e3dcd5] rounded-xl flex items-center space-x-2">
-            <span className="text-base">🛡️</span>
-            <span className="text-[10px] uppercase tracking-wider font-extrabold text-[#8c6239] leading-tight">
-              Administrator accountability: <span className="text-stone-500">All registered updates are synchronized securely.</span>
-            </span>
-          </div>
-        </div>
-
-        {/* RIGHT COLUMN: Interactive Login/Register App Form */}
-        <div className="w-full md:w-1/2 p-6 sm:p-8 flex flex-col justify-between">
+        {/* Interactive Login/Register App Form */}
+        <div className="w-full flex flex-col justify-between h-full flex-grow pt-4">
           <div>
             {/* Header Tabs: Sign In Acc vs Register Acc */}
             <div className="flex border-b border-[#efebe9] mb-6">
@@ -473,6 +413,34 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                 {/* Form fields depending on activeTab */}
                 {activeTab === 'register' && (
                   <>
+                    <div className="space-y-1">
+                      <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5c4033]">Account Role Type *</label>
+                      <div className="grid grid-cols-2 gap-2 p-1 bg-[#faf6f0] border border-[#e3dcd5] rounded-xl mb-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedRole('customer')}
+                          className={`py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                            selectedRole === 'customer'
+                              ? 'bg-[#8c6239] text-white shadow-xs'
+                              : 'text-stone-400 hover:text-[#8c6239] bg-transparent'
+                          }`}
+                        >
+                          Customer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedRole('admin')}
+                          className={`py-1.5 rounded-lg text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer ${
+                            selectedRole === 'admin'
+                              ? 'bg-[#8c6239] text-white shadow-xs'
+                              : 'text-stone-400 hover:text-[#8c6239] bg-transparent'
+                          }`}
+                        >
+                          Admin Portal
+                        </button>
+                      </div>
+                    </div>
+
                     <div className="space-y-1">
                       <label className="block text-[10px] uppercase font-bold tracking-widest text-[#5c4033]">Full Legal Name *</label>
                       <div className="relative">

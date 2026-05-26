@@ -1036,4 +1036,8 @@ async function startServer() {
 // Instantiate DB on launch
 loadDB();
 
-startServer();
+if (!process.env.VERCEL) {
+  startServer();
+}
+
+export { app, loadDB, saveDB };

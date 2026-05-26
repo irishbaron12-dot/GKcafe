@@ -39,9 +39,9 @@ export default function ContactView() {
             <span className="text-[10px] font-black uppercase tracking-widest text-[#8c6239] block">
               GET IN TOUCH INSTANTLY
             </span>
-            <h3 className="text-2xl font-serif text-[#2d1b10]">Send Banquets A Message</h3>
+            <h3 className="text-2xl font-serif text-[#2d1b10]">Send Catering A Message</h3>
             <p className="text-xs text-stone-500 leading-relaxed font-semibold">
-              Have unique requirements for your special event, menu adjustments, or corporate deliveries? Drop us a line and our banquets officer will get back you shortly.
+              Have unique requirements for your special event, menu adjustments, or corporate deliveries? Drop us a line and our catering officer will get back you shortly.
             </p>
           </div>
 
@@ -126,7 +126,7 @@ export default function ContactView() {
               <div className="flex items-start space-x-3">
                 <Phone className="w-5 h-5 text-[#8c6239] shrink-0 mt-0.5" />
                 <div>
-                  <p className="font-extrabold text-[#2d1b10]">Banquets & Delivery Hotlines</p>
+                  <p className="font-extrabold text-[#2d1b10]">Catering & Delivery Hotlines</p>
                   <p className="text-[#5c4033] font-extrabold mt-1">09176334053</p>
                 </div>
               </div>

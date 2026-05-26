@@ -329,7 +329,7 @@ export default function App() {
 
     const data = await res.json();
     if (!res.ok) {
-      throw new Error(data.error || 'Failed scheduling banquet event.');
+      throw new Error(data.error || 'Failed scheduling catered meal event.');
     }
 
     fetchBookings();
@@ -536,7 +536,7 @@ export default function App() {
               onBookCatering={() => {
                 setActiveTab('menu');
                 setTimeout(() => {
-                  document.getElementById('banquet-calendar-panel')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('catered-meal-calendar-panel')?.scrollIntoView({ behavior: 'smooth' });
                 }, 150);
               }}
             />
@@ -644,7 +644,7 @@ export default function App() {
               <div className="max-w-4xl mx-auto px-4 text-center space-y-6">
                 <span className="text-[10px] font-black tracking-widest text-[#8c6239] uppercase">CLIENT ELEVATIONS</span>
                 <p className="text-lg font-serif italic text-[#3c2a1e]">
-                  "GK Cafe by Primo completely redefined our wedding banquet. The coffee station was the main topic of conversation, and the staffing details looked extraordinarily executive. Thank you!"
+                  "GK Cafe by Primo completely redefined our wedding catered meal. The coffee station was the main topic of conversation, and the staffing details looked extraordinarily executive. Thank you!"
                 </p>
                 <div>
                   <p className="text-[11px] font-black text-[#2d1b15]">Christina Reyes</p>
@@ -703,7 +703,7 @@ export default function App() {
               onBookCateringClick={() => {
                 setActiveTab('contact');
                 setTimeout(() => {
-                  document.getElementById('banquet-calendar-panel')?.scrollIntoView({ behavior: 'smooth' });
+                  document.getElementById('catered-meal-calendar-panel')?.scrollIntoView({ behavior: 'smooth' });
                 }, 150);
               }}
               searchQuery={searchQuery}
@@ -711,7 +711,7 @@ export default function App() {
             />
 
             {/* Dynamic Event Booking Scheduler Anchor */}
-            <div className="pt-10 border-t border-[#e3dcd5]" id="banquet-calendar-panel">
+            <div className="pt-10 border-t border-[#e3dcd5]" id="catered-meal-calendar-panel">
               <div className="max-w-3xl mx-auto w-full">
                 <Suspense fallback={<DelayedFallback />}>
                   <BookingForm
@@ -745,7 +745,7 @@ export default function App() {
             </Suspense>
 
             {/* Testimonials Registry block */}
-            <div className="pt-12 border-t border-[#e3dcd5]" id="banquet-reviews-block">
+            <div className="pt-12 border-t border-[#e3dcd5]" id="catered-meal-reviews-block">
               <div className="space-y-4 mb-8">
                 <span className="text-[10px] font-black tracking-widest text-[#8c6239] uppercase block text-center">COMMUNITY FEEDBACK INTEGRITY</span>
                   <h3 className="text-2xl font-serif text-[#5c4033] text-center">Check Out Our Reviews</h3>
@@ -791,7 +791,7 @@ export default function App() {
                 <span className="text-4xl">⚠️</span>
                 <h3 className="text-sm font-bold text-[#8c6239]">Access Refused. Private Administration Path.</h3>
                 <p className="text-[11px] text-[#5c4033] max-w-xs mx-auto">
-                  Only verified GK Cafe Prim Banquets Administrators can access active dispatch databases. Please log in using verified admin access.
+                  Only verified GK Cafe Prim Catering Administrators can access active dispatch databases. Please log in using verified admin access.
                 </p>
                 <button
                   onClick={() => setIsAuthOpen(true)}

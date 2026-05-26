@@ -181,7 +181,7 @@ export default function CustomerDashboard({
     tierBenefits = [
       'Free Unlimited Kakanin upgrades on every meal',
       'Instant reservation priorities with zero slot waiting lists',
-      'Personal chef consultations for custom catering banquets',
+      'Personal chef consultations for custom catering catered meals',
       '15% Flat Discount across the entire GK Cafe catalog'
     ];
   } else if (totalSpend >= 2500 || totalBookingsPlaced >= 3) {
@@ -208,7 +208,7 @@ export default function CustomerDashboard({
           <span className="text-[10px] font-black tracking-widest text-[#8c6239] uppercase block mb-1 font-sans">CUSTOMER ACCOUNT GATEWAY</span>
           <h2 className="text-2xl font-serif text-[#5c4033] font-black leading-tight">Mabuhay, {currentUser?.name || "Customer"}!</h2>
           <p className="text-xs text-stone-500 mt-1.5 leading-relaxed max-w-lg font-medium">
-            Monitor meals tracking, review your banquet booking packages in real-time, and check your digital VIP Loyalty Card status.
+            Monitor meals tracking, review your catered meal booking packages in real-time, and view your verified profile information.
           </p>
         </div>
 
@@ -268,7 +268,7 @@ export default function CustomerDashboard({
           }`}
         >
           <User className="w-4 h-4 shrink-0" />
-          <span>👤 My Account & Loyalty Card</span>
+          <span>👤 My Account</span>
         </button>
       </div>
 
@@ -646,7 +646,7 @@ export default function CustomerDashboard({
                   </div>
                   <h4 className="text-sm font-serif font-black text-stone-650">No active reservations right now.</h4>
                   <p className="text-xs text-stone-450 max-w-sm mx-auto leading-relaxed font-semibold">
-                    Have an upcoming wedding banquet, family reunion, birthday party, or cozy morning espresso meet? Reserve slot packages in seconds.
+                    Have an upcoming wedding catered meal, family reunion, birthday party, or cozy morning espresso meet? Reserve slot packages in seconds.
                   </p>
                   <button 
                     onClick={() => setActiveTab('catering')}
@@ -698,7 +698,7 @@ export default function CustomerDashboard({
                           <div>
                             <span className="text-[8px] text-zinc-400 block font-bold uppercase tracking-widest">Booking Specifications</span>
                             <p className="text-[11px] text-[#8c6239] truncate mt-0.5">
-                              {bkg.bookingType === 'catering' ? '🧁 Banquet Catering' : '☕ Lounge Resrv Space'}
+                              {bkg.bookingType === 'catering' ? '🧁 Catered Meal Catering' : '☕ Lounge Resrv Space'}
                             </p>
                             <p className="text-[9.5px] text-stone-450 font-semibold">{bkg.guestCount} Headcount size</p>
                           </div>
@@ -738,7 +738,7 @@ export default function CustomerDashboard({
                           : 'bg-[#faf6f0] border-amber-250 text-[#8c6239] italic'
                       }`}>
                         {bkg.status === 'approved' 
-                          ? '📅 Schedule locked in GK calendar! Banquet chefs assigned. Feel free to contact the administrator'
+                          ? '📅 Schedule locked in GK calendar! Catered meal chefs assigned. Feel free to contact the administrator'
                           : '⏳ Slot requested! Management checks schedule conflicts for that calendar date portion.'}
                       </div>
                     </div>
@@ -799,64 +799,10 @@ export default function CustomerDashboard({
         {activeSubTab === 'account' && (
           <div className="space-y-8 animate-fade-in">
             {/* Split Grid Profile Information */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 gap-6">
               
-              {/* Box 1: Beautiful Virtual Membership Loyalty Pass */}
-              <div className="bg-gradient-to-br from-zinc-950 via-stone-900 to-[#2d1b10] p-6 rounded-3xl text-white relative flex flex-col justify-between shadow-lg min-h-[220px] overflow-hidden group select-none md:col-span-1">
-                {/* Decorative golden gradients inside pass card */}
-                <div className="absolute -top-10 -right-10 w-44 h-44 bg-[#8c6239]/20 rounded-full blur-2xl group-hover:scale-110 transition-transform duration-700" />
-                
-                {/* Header elements */}
-                <div className="flex justify-between items-start z-10">
-                  <div>
-                    <span className="text-[9.5px] font-black tracking-widest text-[#eadaaf]/80 uppercase block">GK PREMIUM PASSPORT</span>
-                    <h3 className="font-serif text-lg text-white font-black leading-none mt-1">GK CAFE BY PRIMO</h3>
-                  </div>
-                  <Coffee className="w-8 h-8 text-[#eadaaf] shrink-0 fill-[#eadaaf]/10" />
-                </div>
-
-                {/* Subtitle Loyalty level and bar */}
-                <div className="z-10 mt-6 space-y-2">
-                  <span className="text-[9.5px] font-black uppercase text-stone-400 tracking-wider">LOYALTY REWARDS CLASS LEVEL</span>
-                  <div className="text-sm font-serif text-[#eadaaf] font-black tracking-wide flex items-center gap-1.5">
-                    <Award className="w-5 h-5 text-amber-400" />
-                    <span>{tierName.replace(/[^a-zA-Z\s]/g, '').trim()}</span>
-                  </div>
-                  {/* Miniature loyalty meter representation */}
-                  <div className="w-full h-1 bg-stone-850 rounded-full overflow-hidden">
-                    <div 
-                      className="h-full bg-gradient-to-r from-amber-400 to-[#eadaaf]"
-                      style={{ width: `${Math.min(100, (totalSpend / 5000) * 100)}%` }}
-                    />
-                  </div>
-                </div>
-
-                {/* Card holder Name and Barcode ID */}
-                <div className="flex justify-between items-end gap-3 z-10 mt-6 md:mt-4">
-                  <div>
-                    <span className="text-[8px] text-zinc-500 uppercase font-black block">PASSPORT HOLDER</span>
-                    <p className="text-xs font-black text-stone-100 tracking-wide capitalize truncate max-w-[130px]">{currentUser?.name}</p>
-                  </div>
-                  <div className="text-right flex flex-col items-center shrink-0">
-                    {avatarUrl ? (
-                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-[#eadaaf]/60 shadow-md mb-0.5">
-                        <img 
-                          src={avatarUrl} 
-                          alt="Passport ID" 
-                          className="w-full h-full object-cover animate-fade-in"
-                          referrerPolicy="no-referrer"
-                        />
-                      </div>
-                    ) : (
-                      <QrCode className="w-8 h-8 text-white opacity-80 animate-fade-in" />
-                    )}
-                    <span className="text-[7.5px] font-mono text-stone-400 mt-1 uppercase">MEMBER: {currentUser?.id?.substring(0, 8)}</span>
-                  </div>
-                </div>
-              </div>
-
               {/* Box 2: Profile statistics and registries summary */}
-              <div className="bg-white border border-[#efebe9] p-6 rounded-3xl shadow-xs space-y-5 md:col-span-2 flex flex-col justify-between">
+              <div className="bg-white border border-[#efebe9] p-6 rounded-3xl shadow-xs space-y-5 flex flex-col justify-between">
                 <div>
                   <h4 className="text-xs font-black tracking-widest text-[#8c6239] uppercase">
                     🔒 Verified Registries & Profile Ledger
@@ -952,44 +898,8 @@ export default function CustomerDashboard({
                   </div>
                 </div>
 
-                <div className="bg-amber-50/50 border border-amber-100/70 p-4 rounded-2xl flex flex-col sm:flex-row gap-3 items-start sm:items-center justify-between">
-                  <div className="space-y-0.5">
-                    <span className="text-[8.5px] text-[#8c6239] font-black uppercase tracking-wider block">VIP Loyalty Tier Perks Status</span>
-                    <p className="text-xs text-[#5c4033] font-serif font-extrabold">{tierName}</p>
-                  </div>
-                  {nextTierPrice > 0 ? (
-                    <span className="text-[10px] bg-white text-stone-500 border border-stone-200 px-3 py-1.5 rounded-xl font-semibold prose max-w-[200px] leading-tight text-center sm:text-right">
-                      Spend <strong>₱{nextTierPrice}</strong> more to unlock elite rewards tiers!
-                    </span>
-                  ) : (
-                    <span className="text-[10px] bg-[#faf6f0] text-[#8c6239] border border-[#eadaaf] px-3 py-1.5 rounded-xl font-black uppercase tracking-wide">
-                      ⚡ Max Loyalty Perks Unlocked
-                    </span>
-                  )}
-                </div>
               </div>
 
-            </div>
-
-            {/* Loyalty Tier Perks Ledger Card */}
-            <div className="bg-stone-50 border border-[#efebe9] p-6 rounded-3xl space-y-4">
-              <div className="flex items-center space-x-2">
-                <Gift className="w-5 h-5 text-[#8c6239]" />
-                <h4 className="text-sm font-serif font-black text-[#5c4033] tracking-tight">
-                  Premium Tier Privileges & Active Perks Benefits
-                </h4>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 pt-1">
-                {tierBenefits.map((benefit, idx) => (
-                  <div key={idx} className="bg-white border border-[#efebe9] p-3 rounded-2xl flex items-start space-x-3.5 shadow-5xs">
-                    <div className="w-5 h-5 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center shrink-0 border border-emerald-100 mt-0.5">
-                      <Check className="w-3.5 h-3.5" />
-                    </div>
-                    <span className="text-xs font-bold text-stone-600 leading-relaxed">{benefit}</span>
-                  </div>
-                ))}
-              </div>
             </div>
           </div>
         )}

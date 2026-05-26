@@ -116,7 +116,7 @@ export default function BookingForm({
             </label>
             <input
               type="text"
-              placeholder="e.g. Reyes Family Reunion Banquet"
+              placeholder="e.g. Reyes Family Reunion Catered Meal"
               value={eventName}
               onChange={(e) => setEventName(e.target.value)}
               required
@@ -169,7 +169,7 @@ export default function BookingForm({
               className="w-full text-xs p-2.5 rounded-lg border border-[#e3dcd5] focus:outline-none focus:ring-1 focus:ring-[#8c6239] transition-all bg-[#faf6f0]/30"
             >
               <option value="08:00">08:00 AM — Morning Brunch Setup</option>
-              <option value="11:00">11:00 AM — Elite Lunch Banquet</option>
+              <option value="11:00">11:00 AM — Elite Lunch Catered Meal</option>
               <option value="14:00">02:00 PM — Midday Seminars</option>
               <option value="18:00">06:00 PM — Evening Gala Buffet</option>
               <option value="20:00">08:00 PM — Deluxe Late Night Reception</option>

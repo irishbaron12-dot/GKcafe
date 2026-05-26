@@ -123,7 +123,7 @@ export default function AdminDashboard({
     { id: 'e1', title: 'Grand Wedding catering buffet', date: '2026-05-24', time: '11:00', type: 'catering', client: 'Milton Wedding VIP', location: 'Milton Grand Ballroom' },
     { id: 'e2', title: 'Consultation: VIP Corporate Coffee lounge booking', date: '2026-05-26', time: '14:30', type: 'meeting', client: 'Aero Corp Group', location: 'Coffee Lounge VIP Table' },
     { id: 'e3', title: 'Reunion buffet event catering dispatch', date: '2026-05-29', time: '18:00', type: 'catering', client: 'Aquino Reunion Family', location: 'Los Baños Garden Pavillion' },
-    { id: 'e4', title: 'Milton client proposal review', date: '2026-05-23', time: '09:00', type: 'meeting', client: 'Milton Banquet Coordinator', location: 'Admin Office' }
+    { id: 'e4', title: 'Milton client proposal review', date: '2026-05-23', time: '09:00', type: 'meeting', client: 'Milton Catering Coordinator', location: 'Admin Office' }
   ]);
   const [selectedCalendarDate, setSelectedCalendarDate] = useState<string>('2026-05-23');
   const [newEventTitle, setNewEventTitle] = useState('');
@@ -319,8 +319,8 @@ export default function AdminDashboard({
   return (
     <div className="space-y-6">
       
-      {/* 1. Header Banner & Dynamic Pill Indicators */}
-      <div className="bg-white rounded-3xl border border-[#efebe9] p-6 sm:p-8 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 shadow-xs">
+      {/* 1. Header Banner */}
+      <div className="bg-white rounded-3xl border border-[#efebe9] p-6 sm:p-8 flex flex-col gap-4 shadow-xs">
         <div>
           <span className="text-[#b45309] font-black tracking-[0.2em] text-[10px] sm:text-xs uppercase block">
             LIVE CAFE OPERATIONAL COMMAND
@@ -331,70 +331,6 @@ export default function AdminDashboard({
           <p className="text-xs text-zinc-500 font-semibold mt-1 max-w-2xl leading-relaxed">
             Analyze revenue stats, dispatch orders, approve dine-in bookings, and curate canteen menus.
           </p>
-        </div>
-
-        {/* Dynamic Indicator Pills matching the screenshot */}
-        <div className="flex flex-wrap gap-2 justify-start lg:justify-end w-full lg:w-auto">
-          <button 
-            onClick={() => setActiveSubTab('orders')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'orders' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Orders Queue ({pendingOrdersCount})</span>
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('tables')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'tables' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Tables ({pendingTablesCount})</span>
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('catering')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'catering' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Catering ({pendingCateringCount})</span>
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('menu')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'menu' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Menu Curator ({menuItems.length})</span>
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('analytics')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'analytics' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Finances Analytics</span>
-          </button>
-          <button 
-            onClick={() => setActiveSubTab('calendar')}
-            className={`px-3 py-1.5 rounded-full text-[11px] font-extrabold uppercase transition-all tracking-wider flex items-center space-x-1 border cursor-pointer ${
-              activeSubTab === 'calendar' 
-                ? 'bg-[#5c4033] text-[#faf6f0] border-[#5c4033] shadow-sm' 
-                : 'bg-stone-50 text-[#5c4033] border-stone-200 hover:bg-stone-100'
-            }`}
-          >
-            <span>Appointments</span>
-          </button>
         </div>
       </div>
 
@@ -929,8 +865,8 @@ export default function AdminDashboard({
                             <button
                               onClick={() => {
                                 triggerConfirm(
-                                  'Approve Banquet Booking',
-                                  'Accept this grand banquet booking?',
+                                  'Approve Catered Meal Booking',
+                                  'Accept this grand catered meal booking?',
                                   async () => {
                                     try {
                                       await onUpdateBookingStatus(bkg.id, 'approved');
@@ -1180,7 +1116,7 @@ export default function AdminDashboard({
                     <div className="flex justify-start space-x-4 pt-2 text-[9px] font-extrabold uppercase">
                       <div className="flex items-center space-x-1.5">
                         <span className="h-2 w-2 rounded-full bg-amber-600 block shrink-0" />
-                        <span className="text-stone-500">Locked Catering Banquet</span>
+                        <span className="text-stone-500">Locked Catered Meal</span>
                       </div>
                       <div className="flex items-center space-x-1.5">
                         <span className="h-2 w-2 rounded-full bg-cyan-500 block shrink-0" />
@@ -2258,7 +2194,7 @@ export default function AdminDashboard({
                             exit={{ opacity: 0, y: -10 }}
                             className="bg-[#faf6f0] p-4 border border-[#eadaaf] rounded-2xl text-[10.5px] text-[#8c6239] font-semibold leading-relaxed"
                           >
-                            💡 <strong>Interactive Donut Chart active:</strong> Segments dynamically represent delivery dispatches, pending lines, and catered banquets. Hover/tap any slice for deep metrics insights.
+                            💡 <strong>Interactive Donut Chart active:</strong> Segments dynamically represent delivery dispatches, pending lines, and catered meals. Hover/tap any slice for deep metrics insights.
                           </motion.div>
                         ) : hoveredPieSegment === 'success' ? (
                           <motion.div
@@ -2288,7 +2224,7 @@ export default function AdminDashboard({
                             exit={{ opacity: 0, y: -10 }}
                             className="bg-indigo-50 p-4 border border-indigo-200 rounded-2xl text-[10.5px] text-indigo-850 font-semibold leading-relaxed"
                           >
-                            📅 <strong>Majestic Catering & Schedules ({pctCatering.toFixed(1)}% Ratio):</strong> Represents {cateringCount} banquets and lounge tables. Outstanding high-ticket events driving long-term customer relationships.
+                            📅 <strong>Majestic Catering & Schedules ({pctCatering.toFixed(1)}% Ratio):</strong> Represents {cateringCount} catered meals and lounge tables. Outstanding high-ticket events driving long-term customer relationships.
                           </motion.div>
                         )}
                       </AnimatePresence>

@@ -306,7 +306,7 @@ export default function AuthModal({ isOpen, onClose, onLoginSuccess }: AuthModal
                 </div>
                 <div className="space-y-0.5 leading-snug">
                   <p className="text-xs font-black text-[#5c4033]">Primo Chef Admin</p>
-                  <p className="text-[11px] text-[#8c6239]">Banquets coordinator, kitchen orders & system planner.</p>
+                  <p className="text-[11px] text-[#8c6239]">Catered meals coordinator, kitchen orders & system planner.</p>
                   <p className="text-[10px] font-mono text-stone-400 font-bold mt-1">
                     Email: <span className="text-[#8c6239]">primo@canteen.com</span> | PW: <span className="text-[#8c6239]">admin123</span>
                   </p>

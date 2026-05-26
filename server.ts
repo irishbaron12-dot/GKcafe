@@ -3,11 +3,13 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+import 'dotenv/config';
 import express from 'express';
 import compression from 'compression';
 import path from 'path';
 import fs from 'fs';
 import crypto from 'crypto';
+import pg from 'pg';
 import { createServer as createViteServer } from 'vite';
 
 const app = express();
@@ -20,6 +22,20 @@ app.use(compression());
 // Body parsers
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+// For Serverless environments (like Vercel), block and wait for database initialization if Aiven is configured rather than running in the background.
+app.use(async (req, res, next) => {
+  const dbUrl = process.env.DATABASE_URL || process.env.AIVEN_DATABASE_URL;
+  if (dbUrl && !cachedDB) {
+    console.log(`[Serverless Middleware] Database has not been initialized yet. Bootstrapping connected Aiven and waiting...`);
+    try {
+      await initAivenDB();
+    } catch (err) {
+      console.error("[Serverless Middleware] Error initializing Aiven database:", err);
+    }
+  }
+  next();
+});
 
 // Initial mock-up databases to bootstrap deep richness out-of-the-box
 const INITIAL_MENU = [
@@ -232,12 +248,11 @@ interface DBStructure {
 }
 
 let cachedDB: DBStructure | null = null;
+let aivenPool: pg.Pool | null = null;
+let dbInitializing = false;
 
-function loadDB(): DBStructure {
-  if (cachedDB) {
-    return cachedDB;
-  }
-
+// Standalone function to load database from the local JSON file filesystem (fallback/local development)
+function loadDBFromFile(): DBStructure {
   const defaultUsers = [
     // Create preseeded administrator accounts:
     {
@@ -353,13 +368,290 @@ function loadDB(): DBStructure {
   }
 }
 
+// Asynchronously initialize database tables and pre-populate seeds on Aiven Managed PostgreSQL
+async function initAivenDB(): Promise<DBStructure | null> {
+  const dbUrl = process.env.DATABASE_URL || process.env.AIVEN_DATABASE_URL;
+  if (!dbUrl) {
+    return null;
+  }
+
+  console.log("Configured Aiven AIVEN_DATABASE_URL. Bootstrapping PostgreSQL integration...");
+  const cleanUrl = dbUrl.replace(/[?&]sslmode=[^&]+/i, '');
+  const pool = new pg.Pool({
+    connectionString: cleanUrl,
+    ssl: { rejectUnauthorized: false }
+  });
+
+  try {
+    // Test connection
+    await pool.query('SELECT 1');
+
+    // Make table creations a single atomic batch
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id VARCHAR PRIMARY KEY,
+        name VARCHAR,
+        email VARCHAR UNIQUE,
+        phone VARCHAR,
+        password_hash VARCHAR,
+        salt VARCHAR,
+        role VARCHAR,
+        created_at VARCHAR
+      );
+      CREATE TABLE IF NOT EXISTS menu_items (
+        id VARCHAR PRIMARY KEY,
+        name VARCHAR,
+        description TEXT,
+        price NUMERIC,
+        category VARCHAR,
+        image_url TEXT,
+        active BOOLEAN
+      );
+      CREATE TABLE IF NOT EXISTS orders (
+        id VARCHAR PRIMARY KEY,
+        data JSONB
+      );
+      CREATE TABLE IF NOT EXISTS bookings (
+        id VARCHAR PRIMARY KEY,
+        data JSONB
+      );
+      CREATE TABLE IF NOT EXISTS testimonials (
+        id VARCHAR PRIMARY KEY,
+        data JSONB
+      );
+      CREATE TABLE IF NOT EXISTS faqs (
+        id VARCHAR PRIMARY KEY,
+        data JSONB
+      );
+      CREATE TABLE IF NOT EXISTS notifications (
+        id VARCHAR PRIMARY KEY,
+        data JSONB
+      );
+    `);
+
+    // Check if the database is already seeded
+    const userRes = await pool.query('SELECT COUNT(*) FROM users');
+    const userCount = parseInt(userRes.rows[0].count, 10);
+    const fileFallback = loadDBFromFile();
+
+    if (userCount === 0) {
+      console.log("Aiven PostgreSQL tables are empty. Seeding starting datasets...");
+      // Seed Users
+      for (const u of fileFallback.users) {
+        await pool.query(
+          `INSERT INTO users (id, name, email, phone, password_hash, salt, role, created_at)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT (id) DO NOTHING`,
+          [u.id, u.name, u.email, u.phone, u.passwordHash, u.salt, u.role, u.createdAt]
+        );
+      }
+      // Seed Menu Items
+      for (const m of fileFallback.menuItems) {
+        await pool.query(
+          `INSERT INTO menu_items (id, name, description, price, category, image_url, active)
+           VALUES ($1, $2, $3, $4, $5, $6, $7) ON CONFLICT (id) DO NOTHING`,
+          [m.id, m.name, m.description, m.price, m.category, m.imageUrl, m.active]
+        );
+      }
+      // Seed Testimonials
+      for (const t of fileFallback.testimonials) {
+        await pool.query(
+          `INSERT INTO testimonials (id, data) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING`,
+          [t.id, JSON.stringify(t)]
+        );
+      }
+      // Seed FAQs
+      for (const f of fileFallback.faqs) {
+        await pool.query(
+          `INSERT INTO faqs (id, data) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING`,
+          [f.id, JSON.stringify(f)]
+        );
+      }
+      // Seed Notifications
+      for (const n of fileFallback.notifications) {
+        await pool.query(
+          `INSERT INTO notifications (id, data) VALUES ($1, $2) ON CONFLICT (id) DO NOTHING`,
+          [n.id, JSON.stringify(n)]
+        );
+      }
+      console.log("Successfully seeded Aiven Managed PostgreSQL database maps!");
+    }
+
+    // Load full dataset from Aiven database tables into cache
+    const usersQ = await pool.query('SELECT * FROM users');
+    const menuQ = await pool.query('SELECT * FROM menu_items');
+    const ordersQ = await pool.query('SELECT * FROM orders');
+    const bookingsQ = await pool.query('SELECT * FROM bookings');
+    const testQ = await pool.query('SELECT * FROM testimonials');
+    const faqsQ = await pool.query('SELECT * FROM faqs');
+    const notifQ = await pool.query('SELECT * FROM notifications');
+
+    const pgDB: DBStructure = {
+      users: usersQ.rows.map(r => ({
+        id: r.id,
+        name: r.name,
+        email: r.email,
+        phone: r.phone,
+        passwordHash: r.password_hash,
+        salt: r.salt,
+        role: r.role,
+        createdAt: r.created_at
+      })),
+      menuItems: menuQ.rows.map(r => ({
+        id: r.id,
+        name: r.name,
+        description: r.description,
+        price: Number(r.price),
+        category: r.category,
+        imageUrl: r.image_url,
+        active: r.active
+      })),
+      orders: ordersQ.rows.map(r => r.data),
+      bookings: bookingsQ.rows.map(r => r.data),
+      testimonials: testQ.rows.map(r => r.data),
+      faqs: faqsQ.rows.map(r => r.data),
+      notifications: notifQ.rows.map(r => r.data)
+    };
+
+    aivenPool = pool;
+    cachedDB = pgDB;
+    console.log(`[Aiven DB Connected] loaded ${pgDB.users.length} users and ${pgDB.menuItems.length} menu items.`);
+    return pgDB;
+  } catch (err) {
+    console.error("Failed connecting to Aiven PostgreSQL database, falling back to local file modes:", err);
+    return null;
+  }
+}
+
+// Background asynchronous helper to replicate list changes to Aiven Managed PostgreSQL
+async function saveToAiven(data: DBStructure) {
+  if (!aivenPool) return;
+  try {
+    // Upsert Users
+    for (const u of data.users) {
+      await aivenPool.query(
+        `INSERT INTO users (id, name, email, phone, password_hash, salt, role, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+         ON CONFLICT (id) DO UPDATE SET 
+           name = EXCLUDED.name, 
+           email = EXCLUDED.email, 
+           phone = EXCLUDED.phone, 
+           password_hash = EXCLUDED.password_hash, 
+           salt = EXCLUDED.salt, 
+           role = EXCLUDED.role`,
+        [u.id, u.name, u.email, u.phone, u.passwordHash, u.salt, u.role, u.createdAt]
+      );
+    }
+
+    // Upsert Menu Items
+    for (const m of data.menuItems) {
+      await aivenPool.query(
+        `INSERT INTO menu_items (id, name, description, price, category, image_url, active)
+         VALUES ($1, $2, $3, $4, $5, $6, $7)
+         ON CONFLICT (id) DO UPDATE SET
+           name = EXCLUDED.name,
+           description = EXCLUDED.description,
+           price = EXCLUDED.price,
+           category = EXCLUDED.category,
+           image_url = EXCLUDED.image_url,
+           active = EXCLUDED.active`,
+         [m.id, m.name, m.description, m.price, m.category, m.imageUrl, m.active]
+      );
+    }
+
+    // Upsert Orders & Sync
+    for (const o of data.orders) {
+      await aivenPool.query(
+        `INSERT INTO orders (id, data) VALUES ($1, $2)
+         ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data`,
+        [o.id, JSON.stringify(o)]
+      );
+    }
+    const orderIds = data.orders.map(o => o.id);
+    if (orderIds.length > 0) {
+      await aivenPool.query(`DELETE FROM orders WHERE NOT (id = ANY($1))`, [orderIds]);
+    }
+
+    // Upsert Bookings & Sync
+    for (const b of data.bookings) {
+      await aivenPool.query(
+        `INSERT INTO bookings (id, data) VALUES ($1, $2)
+         ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data`,
+        [b.id, JSON.stringify(b)]
+      );
+    }
+    const bookingIds = data.bookings.map(b => b.id);
+    if (bookingIds.length > 0) {
+      await aivenPool.query(`DELETE FROM bookings WHERE NOT (id = ANY($1))`, [bookingIds]);
+    }
+
+    // Upsert Testimonials
+    for (const t of data.testimonials) {
+      await aivenPool.query(
+        `INSERT INTO testimonials (id, data) VALUES ($1, $2)
+         ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data`,
+        [t.id, JSON.stringify(t)]
+      );
+    }
+
+    // Upsert FAQs
+    for (const f of data.faqs) {
+      await aivenPool.query(
+        `INSERT INTO faqs (id, data) VALUES ($1, $2)
+         ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data`,
+        [f.id, JSON.stringify(f)]
+      );
+    }
+
+    // Upsert Notifications & Sync
+    for (const n of data.notifications) {
+      await aivenPool.query(
+        `INSERT INTO notifications (id, data) VALUES ($1, $2)
+         ON CONFLICT (id) DO UPDATE SET data = EXCLUDED.data`,
+        [n.id, JSON.stringify(n)]
+      );
+    }
+    const notifIds = data.notifications.map(n => n.id);
+    if (notifIds.length > 0) {
+      await aivenPool.query(`DELETE FROM notifications WHERE NOT (id = ANY($1))`, [notifIds]);
+    }
+  } catch (error) {
+    console.error("Asynchronous replication to Aiven Database failed:", error);
+  }
+}
+
+// Background-triggers thread-safe connection to Aiven
+function ensureDBInit() {
+  const dbUrl = process.env.DATABASE_URL || process.env.AIVEN_DATABASE_URL;
+  if (!dbUrl) return;
+  if (!cachedDB && !dbInitializing) {
+    dbInitializing = true;
+    initAivenDB().then(() => {
+      dbInitializing = false;
+    }).catch(err => {
+      console.error("Aiven DB async startup error:", err);
+      dbInitializing = false;
+    });
+  }
+}
+
+function loadDB(): DBStructure {
+  if (cachedDB) {
+    return cachedDB;
+  }
+  ensureDBInit();
+  return loadDBFromFile();
+}
+
 function saveDB(data: DBStructure) {
   cachedDB = data;
+  // Local disk backup
   try {
     fs.writeFileSync(DB_FILE, JSON.stringify(data, null, 2), 'utf-8');
   } catch (err) {
-    console.warn("Could not write to db.json on save (expected in read-only environment like Vercel):", err);
+    console.warn("Could not write to db.json (expected in read-only environment like Vercel):", err);
   }
+  // Replicate to Aiven
+  saveToAiven(data);
 }
 
 // Simple Native SHA-256 password utilities
@@ -1019,6 +1311,40 @@ app.get('/api/admin/sales-stats', authenticate, requireAdmin, (req, res) => {
     allOrdersCount: db.orders.length,
     allBookingsCount: db.bookings.length,
     usersCount: db.users.filter(u => u.role !== 'admin').length,
+  });
+});
+
+// Diagnostic endpoint to check if Aiven PostgreSQL is connected or running on JSON fallback
+app.get('/api/db-status', (req, res) => {
+  const dbUrl = process.env.DATABASE_URL || process.env.AIVEN_DATABASE_URL;
+  let urlParsedInfo = "No target URL configured - running on local fallback";
+  if (dbUrl) {
+    try {
+      const match = dbUrl.match(/@([^/]+)/);
+      if (match && match[1]) {
+        urlParsedInfo = match[1];
+      } else {
+        urlParsedInfo = "Configured URL (secured format)";
+      }
+    } catch (e) {
+      urlParsedInfo = "Configured URL (secured format)";
+    }
+  }
+
+  const db = loadDB();
+  res.json({
+    engine: aivenPool ? 'aiven_postgres' : 'local_json',
+    connected: !!aivenPool,
+    targetHost: urlParsedInfo,
+    stats: {
+      usersCount: db.users.length,
+      menuItemsCount: db.menuItems.length,
+      ordersCount: db.orders.length,
+      bookingsCount: db.bookings.length,
+      testimonialsCount: db.testimonials.length,
+      faqsCount: db.faqs.length,
+      notificationsCount: db.notifications.length,
+    }
   });
 });
 

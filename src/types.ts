@@ -3,6 +3,11 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
+export interface MenuItemSizeOption {
+  name: string;
+  price: number;
+}
+
 export interface MenuItem {
   id: string;
   name: string;
@@ -11,6 +16,7 @@ export interface MenuItem {
   category: 'hot_coffee' | 'iced_coffee' | 'frappes' | 'milk_tea' | 'bilao' | 'delivery_meals';
   imageUrl: string;
   active: boolean;
+  sizes?: MenuItemSizeOption[];
 }
 
 export interface User {
@@ -29,6 +35,7 @@ export interface CartItem {
   price: number;
   imageUrl: string;
   quantity: number;
+  size?: string;
 }
 
 export interface OrderItem {
@@ -36,6 +43,7 @@ export interface OrderItem {
   name: string;
   price: number;
   quantity: number;
+  size?: string;
 }
 
 export type OrderStatus = 'pending' | 'preparing' | 'dispatched' | 'delivered' | 'cancelled';

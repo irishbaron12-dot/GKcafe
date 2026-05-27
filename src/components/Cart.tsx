@@ -171,19 +171,26 @@ export default function Cart({
                         />
                         <div className="flex-1 min-w-0">
                           <p className="text-xs font-extrabold text-[#2d1b10] truncate">{item.name}</p>
-                          <p className="text-xs text-[#8c6239] font-semibold mt-0.5">₱{item.price.toFixed(2)}</p>
+                          <div className="flex flex-wrap items-center gap-1.5 mt-0.5">
+                            <span className="text-xs text-[#8c6239] font-bold">₱{item.price.toFixed(2)}</span>
+                            {item.size && (
+                              <span className="text-[9px] bg-[#faf0e6] text-[#8c6239] border border-[#e3dcd5] rounded-md px-1.5 py-0.5 font-extrabold uppercase">
+                                Size: {item.size}
+                              </span>
+                            )}
+                          </div>
                         </div>
                         <div className="flex items-center space-x-2.5">
                           <div className="flex items-center space-x-1 bg-[#faf6f0] border border-[#e3dcd5] rounded-lg p-1">
                             <button
-                              onClick={() => onUpdateQuantity(item.menuItemId, -1)}
+                              onClick={() => onUpdateQuantity(item.id, -1)}
                               className="p-1 text-stone-600 hover:text-stone-900 hover:bg-[#efebe9] rounded bg-transparent border-0 cursor-pointer"
                             >
                               <Minus className="w-3 h-3" />
                             </button>
                             <span className="text-xs font-extrabold px-1 text-stone-850">{item.quantity}</span>
                             <button
-                              onClick={() => onUpdateQuantity(item.menuItemId, 1)}
+                              onClick={() => onUpdateQuantity(item.id, 1)}
                               className="p-1 text-stone-600 hover:text-stone-900 hover:bg-[#efebe9] rounded bg-transparent border-0 cursor-pointer"
                             >
                               <Plus className="w-3 h-3" />
@@ -191,7 +198,7 @@ export default function Cart({
                           </div>
                           
                           <button
-                            onClick={() => onRemoveItem(item.menuItemId)}
+                            onClick={() => onRemoveItem(item.id)}
                             className="p-2 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors bg-transparent border-0 cursor-pointer"
                           >
                             <Trash2 className="w-4 h-4" />

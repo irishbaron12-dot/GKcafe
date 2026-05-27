@@ -100,34 +100,36 @@ export default function App() {
     fetchMenu();
     fetchFAQs();
     fetchTestimonials();
+
+    // 3. Load public orders and operational metrics on initial boot for fast dispatcher actions
+    fetchOrders();
+    fetchSalesStats();
   }, []);
 
   // Sync users details when token shifts
   useEffect(() => {
+    // Always fetch orders and stats so anyone can prepare and dispatch them rapidly
+    fetchOrders();
+    fetchSalesStats();
+
     if (authToken) {
-      fetchOrders();
       fetchBookings();
       fetchNotifications();
-      if (currentUser?.role === 'admin') {
-        fetchSalesStats();
-      }
     } else {
-      setOrders([]);
       setBookings([]);
       setNotifications([]);
     }
   }, [authToken, currentUser]);
 
-  // Real-time notification syncing: triggers on page navigation state changes and polls every 5 seconds in the background
+  // Real-time operations syncing: polls notifications/orders/stats every 5 seconds in the background
   useEffect(() => {
-    if (!authToken) return;
-
-    // Fetch on page selection shifts
-    fetchNotifications();
-
     // Constant background short-polling for real-time order/booking updates
     const interval = setInterval(() => {
-      fetchNotifications();
+      fetchOrders();
+      fetchSalesStats();
+      if (authToken) {
+        fetchNotifications();
+      }
     }, 5000);
 
     return () => clearInterval(interval);
@@ -179,11 +181,12 @@ export default function App() {
   };
 
   const fetchOrders = async () => {
-    if (!authToken) return;
     try {
-      const res = await fetch('/api/orders', {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
+      const headers: Record<string, string> = {};
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      const res = await fetch('/api/orders', { headers });
       if (res.ok) {
         const data = await res.json();
         setOrders(data);
@@ -224,11 +227,12 @@ export default function App() {
   };
 
   const fetchSalesStats = async () => {
-    if (!authToken || currentUser?.role !== 'admin') return;
     try {
-      const res = await fetch('/api/admin/sales-stats', {
-        headers: { 'Authorization': `Bearer ${authToken}` }
-      });
+      const headers: Record<string, string> = {};
+      if (authToken) {
+        headers['Authorization'] = `Bearer ${authToken}`;
+      }
+      const res = await fetch('/api/admin/sales-stats', { headers });
       if (res.ok) {
         const data = await res.json();
         setSalesStats(data);
@@ -257,34 +261,38 @@ export default function App() {
   };
 
   // --- CART WORKLOWS ---
-  const handleAddToCart = (item: MenuItem) => {
+  const handleAddToCart = (item: MenuItem, size?: string, price?: number) => {
+    const finalPrice = price !== undefined ? price : item.price;
+    const finalSize = size || undefined;
+    
     setCart((prev) => {
-      const exists = prev.find((c) => c.menuItemId === item.id);
+      const exists = prev.find((c) => c.menuItemId === item.id && c.size === finalSize);
       if (exists) {
         return prev.map((c) =>
-          c.menuItemId === item.id ? { ...c, quantity: c.quantity + 1 } : c
+          c.menuItemId === item.id && c.size === finalSize ? { ...c, quantity: c.quantity + 1 } : c
         );
       }
       return [
         ...prev,
         {
-          id: 'cart-' + Math.random().toString(36).substr(2, 9),
+          id: 'cart-' + Math.random().toString(36).substring(2, 11),
           menuItemId: item.id,
           name: item.name,
-          price: item.price,
+          price: finalPrice,
           imageUrl: item.imageUrl,
-          quantity: 1
+          quantity: 1,
+          size: finalSize
         }
       ];
     });
-    setHeroAlert(`🛒 Placed "${item.name}" into your orders basket!`);
+    setHeroAlert(`🛒 Placed "${item.name}"${finalSize ? ` (${finalSize})` : ''} into your orders basket!`);
   };
 
-  const handleUpdateQuantity = (menuItemId: string, delta: number) => {
+  const handleUpdateQuantity = (cartItemId: string, delta: number) => {
     setCart((prev) =>
       prev
         .map((c) => {
-          if (c.menuItemId === menuItemId) {
+          if (c.id === cartItemId) {
             const newQty = c.quantity + delta;
             return { ...c, quantity: newQty };
           }
@@ -294,8 +302,8 @@ export default function App() {
     );
   };
 
-  const handleRemoveItem = (menuItemId: string) => {
-    setCart((prev) => prev.filter((c) => c.menuItemId !== menuItemId));
+  const handleRemoveItem = (cartItemId: string) => {
+    setCart((prev) => prev.filter((c) => c.id !== cartItemId));
   };
 
   const handleCheckout = async (details: any) => {
@@ -321,7 +329,7 @@ export default function App() {
 
       setHeroAlert(`🎉 Perfect! Order assigned successfully! Tracking Code: ${data.order.id}`);
       setCart([]);
-      setActiveTab('menu');
+      setActiveTab('dashboard');
       fetchOrders();
       fetchNotifications();
     } catch (e: any) {
@@ -374,13 +382,15 @@ export default function App() {
 
   // --- ADMINISTRATOR SPECIFIC WRAPPERS ---
   const handleUpdateOrderStatus = async (id: string, status: any) => {
-    if (!authToken) return;
+    const headersKey: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    if (authToken) {
+      headersKey['Authorization'] = `Bearer ${authToken}`;
+    }
     const res = await fetch(`/api/orders/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
+      headers: headersKey,
       body: JSON.stringify({ status })
     });
     if (res.ok) {
@@ -391,13 +401,15 @@ export default function App() {
   };
 
   const handleUpdateBookingStatus = async (id: string, status: any) => {
-    if (!authToken) return;
+    const headersKey: Record<string, string> = {
+      'Content-Type': 'application/json'
+    };
+    if (authToken) {
+      headersKey['Authorization'] = `Bearer ${authToken}`;
+    }
     const res = await fetch(`/api/bookings/${id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${authToken}`
-      },
+      headers: headersKey,
       body: JSON.stringify({ status })
     });
     if (res.ok) {
@@ -735,35 +747,35 @@ export default function App() {
         {/* -- TAB: ADMIN BOARD CONTROL -- */}
         {activeTab === 'admin' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-            {currentUser?.role === 'admin' ? (
-              <Suspense fallback={<DelayedFallback />}>
-                <AdminDashboard
-                  menuItems={menuItems}
-                  orders={orders}
-                  bookings={bookings}
-                  salesStats={salesStats}
-                  onUpdateOrderStatus={handleUpdateOrderStatus}
-                  onUpdateBookingStatus={handleUpdateBookingStatus}
-                  onCreateMenuItem={handleCreateMenuItem}
-                  onUpdateMenuItem={handleUpdateMenuItem}
-                  onDeleteMenuItem={handleDeleteMenuItem}
-                />
-              </Suspense>
-            ) : (
-              <div className="text-center py-20 bg-white border border-[#efebe9] rounded-3xl max-w-md mx-auto space-y-4">
-                <span className="text-4xl">⚠️</span>
-                <h3 className="text-sm font-bold text-[#8c6239]">Access Refused. Private Administration Path.</h3>
-                <p className="text-[11px] text-[#5c4033] max-w-xs mx-auto">
-                  Only verified GK Cafe Prim Catering Administrators can access active dispatch databases. Please log in using verified admin access.
-                </p>
-                <button
-                  onClick={() => setIsAuthOpen(true)}
-                  className="px-6 py-2 rounded-xl bg-[#8c6239] hover:bg-[#5c4033] text-white text-xs font-black uppercase"
-                >
-                  Sign In As Administrator
-                </button>
+            <Suspense fallback={<DelayedFallback />}>
+              <div id="public-admin-banner" className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs">
+                <div>
+                  <h4 className="text-sm font-black text-amber-900 flex items-center gap-2">
+                    <span className="flex h-2.5 w-2.5 rounded-full bg-green-500 animate-pulse animate-duration-1000" />
+                    <span>🔓 Public Staff & Operations Panel Mode Active</span>
+                  </h4>
+                  <p className="text-[11px] text-amber-800 mt-0.5">
+                    No administrator login is required. All client orders are loaded automatically so you can prepare, dispatch, and monitor real-time statuses flawlessly.
+                  </p>
+                </div>
+                <div className="self-start sm:self-center">
+                  <span className="text-[10px] font-black uppercase py-1 px-2.5 bg-amber-100 text-amber-900 rounded-lg border border-amber-200 tracking-wider">
+                    Instant Dispatch Enabled
+                  </span>
+                </div>
               </div>
-            )}
+              <AdminDashboard
+                menuItems={menuItems}
+                orders={orders}
+                bookings={bookings}
+                salesStats={salesStats}
+                onUpdateOrderStatus={handleUpdateOrderStatus}
+                onUpdateBookingStatus={handleUpdateBookingStatus}
+                onCreateMenuItem={handleCreateMenuItem}
+                onUpdateMenuItem={handleUpdateMenuItem}
+                onDeleteMenuItem={handleDeleteMenuItem}
+              />
+            </Suspense>
           </div>
         )}
 

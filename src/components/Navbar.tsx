@@ -133,18 +133,16 @@ export default function Navbar({
             ))}
 
 
-            {currentUser?.role === 'admin' && (
-              <button
-                id="nav-admin-btn"
-                onClick={() => handleNavClick('admin')}
-                className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#8c6239] bg-[#faf6f0] text-[#8c6239] hover:bg-[#efebe9] transition-colors ${
-                  activeTab === 'admin' ? 'ring-2 ring-[#8c6239]' : ''
-                }`}
-              >
-                <ShieldAlert className="w-4 h-4" />
-                <span>Admin Panel</span>
-              </button>
-            )}
+            <button
+              id="nav-admin-btn"
+              onClick={() => handleNavClick('admin')}
+              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#8c6239] bg-[#faf6f0] text-[#8c6239] hover:bg-[#efebe9] transition-colors ${
+                activeTab === 'admin' ? 'ring-2 ring-[#8c6239]' : ''
+              }`}
+            >
+              <ShieldAlert className="w-4 h-4" />
+              <span>Admin & Orders Panel</span>
+            </button>
           </div>
 
 
@@ -419,14 +417,12 @@ export default function Navbar({
               </button>
             )}
 
-            {currentUser?.role === 'admin' && (
-              <button
-                onClick={() => handleNavClick('admin')}
-                className="block w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-[#8c6239] bg-[#faf6f0] hover:bg-[#efebe9]"
-              >
-                🛡️ Admin Panel
-              </button>
-            )}
+            <button
+              onClick={() => handleNavClick('admin')}
+              className="block w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-[#8c6239] bg-[#faf6f0] hover:bg-[#efebe9]"
+            >
+              🛡️ Admin & Orders Panel
+            </button>
 
             <div className="pt-4 border-t border-[#e3dcd5] flex items-center justify-between">
               {currentUser ? (

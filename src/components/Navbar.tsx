@@ -235,7 +235,9 @@ export default function Navbar({
             <button
               id="cart-btn"
               onClick={onOpenCart}
-              className="p-1.5 rounded-xl text-[#8c6239] hover:bg-[#faf6f0] hover:text-[#5c4033] transition-colors relative"
+              className={`p-1.5 rounded-xl text-[#8c6239] hover:bg-[#faf6f0] hover:text-[#5c4033] transition-colors relative ${
+                cartCount > 0 ? 'animate-cart-shake origin-center' : ''
+              }`}
             >
               <ShoppingBag className="w-8 h-8 text-[#8c6239] stroke-[2.2]" />
               {cartCount > 0 && (
@@ -307,7 +309,9 @@ export default function Navbar({
           <div className="md:hidden flex items-center space-x-3">
             <button
               onClick={onOpenCart}
-              className="p-1.5 text-[#8c6239] relative"
+              className={`p-1.5 text-[#8c6239] relative ${
+                cartCount > 0 ? 'animate-cart-shake origin-center' : ''
+              }`}
             >
               <ShoppingBag className="w-7 h-7 text-[#8c6239] stroke-[2.2]" />
               {cartCount > 0 && (

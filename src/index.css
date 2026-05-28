@@ -74,5 +74,33 @@ h1, h2, h3, h4, h5, h6, .brand-font-serif {
   animation-delay: 1.5s;
 }
 
+@keyframes cart-shake {
+  0%, 75%, 100% {
+    transform: rotate(0deg) scale(1);
+  }
+  80% {
+    transform: rotate(-14deg) scale(1.15);
+  }
+  83% {
+    transform: rotate(12deg) scale(1.15);
+  }
+  86% {
+    transform: rotate(-12deg) scale(1.12);
+  }
+  89% {
+    transform: rotate(10deg) scale(1.12);
+  }
+  92% {
+    transform: rotate(-6deg) scale(1.06);
+  }
+  95% {
+    transform: rotate(4deg) scale(1.04);
+  }
+}
+
+.animate-cart-shake {
+  animation: cart-shake 2.5s ease-in-out infinite;
+}
+
 
 

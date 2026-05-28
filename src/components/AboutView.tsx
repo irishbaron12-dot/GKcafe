@@ -254,34 +254,34 @@ export default function AboutView() {
       </div>
 
       {/* Fast Business Metrics Reference */}
-      <div className="rounded-3xl border border-[#e3dcd5] p-8 bg-white grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="flex items-center space-x-4">
-          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239]">
+      <div className="rounded-3xl border border-[#e3dcd5] p-6 bg-white grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="flex items-center space-x-4 p-4 rounded-2xl border border-stone-100 hover:border-[#eadaaf] hover:bg-[#fffcf9] hover:scale-[1.04] hover:shadow-md transition-all duration-300 group cursor-pointer">
+          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239] group-hover:bg-[#8c6239] group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
             <MapPin className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Main Headquarters Location</p>
-            <p className="text-xs font-bold text-[#2d1b10]">Purok 3 Brgy Tranca Bay Laguna</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider transition-colors duration-300 group-hover:text-[#8c6239]">Main Headquarters Location</p>
+            <p className="text-xs font-bold text-[#2d1b10] mt-0.5">Purok 3 Brgy Tranca Bay Laguna</p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239]">
+        <div className="flex items-center space-x-4 p-4 rounded-2xl border border-stone-100 hover:border-[#eadaaf] hover:bg-[#fffcf9] hover:scale-[1.04] hover:shadow-md transition-all duration-300 group cursor-pointer">
+          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239] group-hover:bg-[#8c6239] group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:rotate-12">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Store Operations Hours</p>
-            <p className="text-xs font-bold text-[#2d1b10]">06:00 AM — 07:00 PM Daily</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider transition-colors duration-300 group-hover:text-[#8c6239]">Store Operations Hours</p>
+            <p className="text-xs font-bold text-[#2d1b10] mt-0.5">06:00 AM — 07:00 PM Daily</p>
           </div>
         </div>
 
-        <div className="flex items-center space-x-4">
-          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239]">
+        <div className="flex items-center space-x-4 p-4 rounded-2xl border border-stone-100 hover:border-[#eadaaf] hover:bg-[#fffcf9] hover:scale-[1.04] hover:shadow-md transition-all duration-300 group cursor-pointer">
+          <div className="p-3 bg-[#faf6f0] rounded-2xl text-[#8c6239] group-hover:bg-[#8c6239] group-hover:text-white transition-all duration-300 group-hover:scale-110 group-hover:animate-bounce">
             <Phone className="w-6 h-6" />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider">Hotline & Delivery Inquiries</p>
-            <p className="text-xs font-bold text-[#2d1b10]">09176334053</p>
+            <p className="text-[10px] font-bold text-[#5c4033] uppercase tracking-wider transition-colors duration-300 group-hover:text-[#8c6239]">Hotline & Delivery Inquiries</p>
+            <p className="text-xs font-bold text-[#2d1b10] mt-0.5">09176334053</p>
           </div>
         </div>
       </div>

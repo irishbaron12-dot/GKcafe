@@ -186,22 +186,39 @@ export default function BookingForm({
               
               {/* Portion size slider */}
               <div className="md:col-span-2">
-                <label className="block text-[11px] font-bold text-zinc-700 mb-1.5 flex justify-between">
-                  <span>Target number of individual portions / servings:</span>
-                  <span className="text-[#8c6239] font-black">{guestCount} Portions</span>
-                </label>
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-2.5">
+                  <label className="text-xs font-bold text-zinc-700">
+                    Target number of individual portions / servings:
+                  </label>
+                  <div className="flex items-center space-x-2 bg-[#faf6f0] p-1.5 rounded-xl border border-[#e3dcd5]">
+                    <span className="text-[10px] uppercase font-bold text-[#8c6239] pl-1.5">Enter Count:</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="10000"
+                      value={guestCount || ''}
+                      onChange={(e) => {
+                        const val = parseInt(e.target.value);
+                        setGuestCount(isNaN(val) ? 0 : val);
+                      }}
+                      placeholder="30"
+                      className="w-20 text-center text-xs py-1 px-1.5 rounded-lg border border-[#e3dcd5] focus:outline-none focus:ring-1 focus:ring-[#8c6239] font-black text-[#5c4033] bg-white shadow-xs"
+                    />
+                    <span className="text-[10px] uppercase font-bold text-stone-500 pr-1.5">Pax / Portions</span>
+                  </div>
+                </div>
                 <input
                   type="range"
                   min="30"
                   max="500"
                   step="5"
-                  value={guestCount}
+                  value={guestCount > 500 ? 500 : (guestCount < 30 ? 30 : guestCount)}
                   onChange={(e) => setGuestCount(parseInt(e.target.value))}
-                  className="w-full accent-[#8c6239] mt-2.5 cursor-pointer"
+                  className="w-full h-2 rounded-lg appearance-none cursor-pointer accent-[#8c6239] bg-stone-200"
                 />
-                <div className="flex justify-between text-[9px] font-bold text-zinc-400 mt-1 uppercase tracking-wider">
+                <div className="flex justify-between text-[9px] font-black text-zinc-400 mt-1.5 uppercase tracking-wider">
                   <span>30 Min Portions</span>
-                  <span>500 Max Bulk Quantity</span>
+                  <span>500 Max Slider (Type in box above for larger headcount)</span>
                 </div>
               </div>
 

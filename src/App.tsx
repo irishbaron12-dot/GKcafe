@@ -579,51 +579,7 @@ export default function App() {
               }}
             />
 
-            {/* Best Sellers segment */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="space-y-4 text-center">
-                <span className="text-[10px] font-black tracking-[0.25em] text-[#8c6239] uppercase">
-                  CRAVED BY REGULATION CUSTOMERS
-                </span>
-                <h3 className="text-3xl font-serif text-[#5c4033]">Fiesta Platters & Hot Meals</h3>
-                <p className="text-xs text-[#8c6239]/80 max-w-sm mx-auto leading-relaxed">
-                  Browse standard client-favorite hot portions dispatched freshly with internal thermal couriers.
-                </p>
-              </div>
 
-              {/* Grid of food dishes */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-10">
-                {bestSellers.map((item) => (
-                  <div key={item.id} className="bg-white rounded-3xl border border-[#efebe9] overflow-hidden p-3.5 hover:border-[#8c6239]/40 hover:shadow-xs transition-all flex flex-col justify-between">
-                    <div className="h-48 rounded-2xl overflow-hidden relative">
-                      <img 
-                        src={item.imageUrl} 
-                        alt={item.name} 
-                        className="w-full h-full object-cover"
-                        referrerPolicy="no-referrer"
-                      />
-                      <span className="absolute bottom-3 right-3 bg-white/95 backdrop-blur-md px-3 py-1 rounded-lg text-xs font-black text-[#5c4033]">
-                        ₱{item.price}
-                      </span>
-                    </div>
-
-                    <div className="p-4 space-y-3 flex-1 flex flex-col justify-between">
-                      <div className="space-y-1">
-                        <h4 className="text-xs font-extrabold text-[#5c4033]">{item.name}</h4>
-                        <p className="text-[11px] text-[#8c6239] leading-relaxed font-semibold line-clamp-2">{item.description}</p>
-                      </div>
-
-                      <button
-                        onClick={() => handleAddToCart(item)}
-                        className="w-full py-2 rounded-xl bg-[#8c6239] hover:bg-[#5c4033] text-[#faf6f0] text-[10px] font-black uppercase tracking-wider border-0 cursor-pointer"
-                      >
-                        ⚡ Add to basket
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </section>
 
             {/* Client Testimonials Carousel */}
             <section className="bg-zinc-50 border-y border-zinc-200 py-12">

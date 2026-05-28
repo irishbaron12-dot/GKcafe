@@ -336,7 +336,7 @@ export default function Cart({
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full mt-4 py-3.5 rounded-xl bg-[#2d1b10] text-white text-xs font-black tracking-widest uppercase hover:bg-[#5c4033] transition-all shadow-xs disabled:opacity-60 cursor-pointer"
+                      className="w-full mt-4 py-3.5 rounded-xl bg-[#2d1b10] text-white text-xs font-black tracking-widest uppercase hover:bg-[#5c4033] hover:scale-[1.015] active:scale-[0.985] transition-all duration-200 shadow-xs disabled:opacity-60 cursor-pointer"
                     >
                       {isSubmitting ? 'PROCESSING REQUEST...' : `PLACE SECURE ORDER • ₱${grandTotal.toFixed(2)}`}
                     </button>
@@ -344,7 +344,7 @@ export default function Cart({
                     <button
                       type="button"
                       onClick={onOpenAuth}
-                      className="w-full mt-4 py-3.5 rounded-xl bg-[#8c6239] text-white text-xs font-black tracking-widest uppercase hover:bg-[#5c4033] transition-all cursor-pointer"
+                      className="w-full mt-4 py-3.5 rounded-xl bg-[#8c6239] text-white text-xs font-black tracking-widest uppercase hover:bg-[#5c4033] hover:scale-[1.015] active:scale-[0.985] transition-all duration-200 cursor-pointer"
                     >
                       LOGIN TO CHECKOUT
                     </button>

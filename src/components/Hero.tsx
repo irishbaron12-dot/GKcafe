@@ -30,7 +30,7 @@ export default function Hero({ onOrderNow, onBookCatering }: HeroProps) {
               </span>
             </div>
 
-            <h1 className="text-[44px] sm:text-6xl lg:text-[76px] font-black text-[#5c4033] leading-none tracking-tight">
+            <h1 className="text-[44px] sm:text-6xl lg:text-[76px] font-black text-[#5c4033] leading-none tracking-tight animate-brand-glow">
               GK Cafe <span className="text-[#8c6239] font-serif italic font-normal block lg:inline-block mt-1 lg:mt-0">by Primo</span>
             </h1>
 
@@ -47,7 +47,7 @@ export default function Hero({ onOrderNow, onBookCatering }: HeroProps) {
               <button
                 id="hero-order-btn"
                 onClick={onOrderNow}
-                className="group flex items-center justify-center space-x-2 px-7 py-4 rounded-xl bg-[#8c6239] text-white text-sm font-bold tracking-wider hover:bg-[#5c4033] transition-all shadow-md active:scale-98 cursor-pointer border-0"
+                className="group flex items-center justify-center space-x-2 px-7 py-4 rounded-xl bg-[#8c6239] hover:bg-[#5c4033] text-white text-sm font-bold tracking-wider transition-all duration-300 hover:scale-[1.05] active:scale-95 cursor-pointer border-0 shadow-lg animate-btn-pulse"
               >
                 <span>ORDER FOOD & COFFEE</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1.5 transition-transform" />
@@ -56,9 +56,9 @@ export default function Hero({ onOrderNow, onBookCatering }: HeroProps) {
               <button
                 id="hero-book-btn"
                 onClick={onBookCatering}
-                className="flex items-center justify-center space-x-2 px-7 py-4 rounded-xl bg-white text-[#5c4033] border-2 border-[#8c6239] text-sm font-bold tracking-wider hover:bg-[#faf6f0] transition-all cursor-pointer active:scale-98"
+                className="flex items-center justify-center space-x-2 px-7 py-4 rounded-xl bg-[#2d1b10] hover:bg-[#5c4033] text-white text-sm font-bold tracking-wider transition-all duration-300 hover:scale-[1.05] active:scale-95 cursor-pointer border-0 shadow-lg animate-btn-pulse-delayed"
               >
-                <CalendarDays className="w-4 h-4 text-[#8c6239]" />
+                <CalendarDays className="w-4 h-4 text-orange-200" />
                 <span>BOOK EVENT</span>
               </button>
             </div>

@@ -104,11 +104,18 @@ export default function Navbar({
             <button 
               id="nav-logo-btn"
               onClick={() => handleNavClick('home')} 
-              className="flex items-center text-left bg-transparent border-0 cursor-pointer focus:outline-none"
+              className="flex items-center text-left bg-transparent border-0 cursor-pointer focus:outline-none gap-2.5 group"
             >
-              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#5c4033] text-white">
+              <div className="flex items-center justify-center w-11 h-11 rounded-xl bg-[#5c4033] text-white transition-all group-hover:scale-105 group-hover:bg-[#8c6239] shadow-sm">
                 <Coffee className="w-6 h-6 animate-pulse" />
               </div>
+              <span className={`text-base font-black transition-all duration-300 ml-1.5 ${
+                activeTab === 'home'
+                  ? 'text-[#8c6239] drop-shadow-[0_0_8px_rgba(140,98,57,0.5)] scale-[1.02] border-b border-[#8c6239]/20'
+                  : 'text-[#5c4033] hover:text-[#8c6239]'
+              }`}>
+                GK Cafe <span className="font-serif italic font-normal text-stone-500">by Primo</span>
+              </span>
             </button>
           </div>
 
@@ -133,16 +140,18 @@ export default function Navbar({
             ))}
 
 
-            <button
-              id="nav-admin-btn"
-              onClick={() => handleNavClick('admin')}
-              className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#8c6239] bg-[#faf6f0] text-[#8c6239] hover:bg-[#efebe9] transition-colors ${
-                activeTab === 'admin' ? 'ring-2 ring-[#8c6239]' : ''
-              }`}
-            >
-              <ShieldAlert className="w-4 h-4" />
-              <span>Admin & Orders Panel</span>
-            </button>
+            {currentUser?.role === 'admin' && (
+              <button
+                id="nav-admin-btn"
+                onClick={() => handleNavClick('admin')}
+                className={`flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider border border-[#8c6239] bg-[#faf6f0] text-[#8c6239] hover:bg-[#efebe9] hover:scale-[1.04] active:scale-95 transition-all duration-200 ${
+                  activeTab === 'admin' ? 'ring-2 ring-[#8c6239]' : ''
+                }`}
+              >
+                <ShieldAlert className="w-4 h-4" />
+                <span>Admin & Orders Panel</span>
+              </button>
+            )}
           </div>
 
 
@@ -154,7 +163,7 @@ export default function Navbar({
               <button
                 id="bell-notif-btn"
                 onClick={() => setShowNotifications(!showNotifications)}
-                className="p-2.5 rounded-xl text-[#5c4033] hover:bg-[#faf6f0] hover:text-[#8c6239] transition-colors relative"
+                className="p-2.5 rounded-xl text-[#5c4033] hover:bg-[#faf6f0] hover:text-[#8c6239] hover:scale-110 active:scale-95 transition-all duration-200 relative"
               >
                 <Bell className="w-5 h-5" />
                 {unreadNotifications.length > 0 && (
@@ -286,7 +295,7 @@ export default function Navbar({
               <button
                 id="login-btn"
                 onClick={onOpenAuth}
-                className="flex items-center space-x-2 px-4.5 py-2.5 rounded-xl bg-[#8c6239] text-white text-xs font-bold tracking-wider hover:bg-[#5c4033] transition-all cursor-pointer border-0 shadow-sm"
+                className="flex items-center space-x-2 px-4.5 py-2.5 rounded-xl bg-[#8c6239] text-white text-xs font-bold tracking-wider hover:bg-[#5c4033] hover:scale-[1.03] active:scale-95 transition-all duration-200 cursor-pointer border-0 shadow-sm"
               >
                 <User className="w-4 h-4" />
                 <span>LOGIN / SIGN UP</span>
@@ -417,12 +426,14 @@ export default function Navbar({
               </button>
             )}
 
-            <button
-              onClick={() => handleNavClick('admin')}
-              className="block w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-[#8c6239] bg-[#faf6f0] hover:bg-[#efebe9]"
-            >
-              🛡️ Admin & Orders Panel
-            </button>
+            {currentUser?.role === 'admin' && (
+              <button
+                onClick={() => handleNavClick('admin')}
+                className="block w-full text-left px-3 py-2 rounded-xl text-sm font-bold text-[#8c6239] bg-[#faf6f0] hover:bg-[#efebe9]"
+              >
+                🛡️ Admin & Orders Panel
+              </button>
+            )}
 
             <div className="pt-4 border-t border-[#e3dcd5] flex items-center justify-between">
               {currentUser ? (

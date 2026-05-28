@@ -52,14 +52,14 @@ function MenuItemCard({ item, onAddToCart }: { item: MenuItem; onAddToCart: (ite
 
   return (
     <div 
-      className="bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-xs hover:border-[#8c6239]/40 hover:shadow-md transition-all flex flex-col h-full justify-between"
+      className="group bg-white rounded-2xl border border-stone-200 overflow-hidden shadow-xs hover:border-[#8c6239]/50 hover:shadow-xl hover:-translate-y-1.5 transform transition-all duration-300 flex flex-col h-full justify-between"
     >
       {/* Product Visual Container */}
       <div className="relative h-48 bg-stone-50 overflow-hidden">
         <img 
           src={item.imageUrl} 
           alt={item.name} 
-          className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           referrerPolicy="no-referrer"
         />
         
@@ -96,7 +96,7 @@ function MenuItemCard({ item, onAddToCart }: { item: MenuItem; onAddToCart: (ite
                   key={s.name}
                   type="button"
                   onClick={() => setSelectedSize(s.name)}
-                  className={`py-1 text-[8px] font-extrabold uppercase text-center border-2 transition-all cursor-pointer rounded-lg ${
+                  className={`py-1 text-[8px] font-extrabold uppercase text-center border-2 transition-all cursor-pointer rounded-lg hover:scale-[1.03] active:scale-95 ${
                     selectedSize === s.name
                       ? 'border-[#8c6239] bg-[#faf6f0] text-[#8c6239] font-black shadow-xs'
                       : 'border-[#efebe9] hover:bg-[#efebe9]/55 text-stone-500 bg-white'
@@ -113,7 +113,7 @@ function MenuItemCard({ item, onAddToCart }: { item: MenuItem; onAddToCart: (ite
         {/* Card footer CTA selection */}
         <button
           onClick={() => onAddToCart(item, selectedSize || undefined, displayPrice)}
-          className="w-full flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#8c6239] hover:bg-[#5c4033] text-white text-[10px] font-black uppercase tracking-widest transition-colors cursor-pointer border-0 shadow-xs"
+          className="w-full flex items-center justify-center space-x-1.5 px-4 py-2.5 rounded-xl bg-[#8c6239] hover:bg-[#5c4033] hover:scale-[1.02] active:scale-98 text-white text-[10px] font-black uppercase tracking-widest transition-all duration-250 cursor-pointer border-0 shadow-xs"
         >
           <ShoppingBag className="w-3.5 h-3.5" />
           <span>Add to Basket</span>

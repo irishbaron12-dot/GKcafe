@@ -216,7 +216,7 @@ export default function BookingForm({
                   key={size}
                   type="button"
                   onClick={() => setGuestCount(size)}
-                  className={`py-2 px-3 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
+                  className={`py-2 px-3 rounded-lg text-xs font-bold border hover:scale-[1.03] active:scale-95 transition-all duration-200 cursor-pointer ${
                     guestCount === size
                       ? 'bg-[#8c6239] text-white border-[#8c6239]'
                       : 'bg-white text-stone-600 border-stone-200'
@@ -251,7 +251,7 @@ export default function BookingForm({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full py-4 rounded-xl bg-[#2d1b10] text-[#faf6f0] text-xs font-bold uppercase tracking-widest hover:bg-[#8c6239] transition-all cursor-pointer shadow-sm disabled:opacity-60"
+            className="w-full py-4 rounded-xl bg-[#2d1b10] text-[#faf6f0] text-xs font-bold uppercase tracking-widest hover:bg-[#8c6239] hover:scale-[1.015] active:scale-[0.985] transition-all duration-200 cursor-pointer shadow-sm disabled:opacity-60"
           >
             {isSubmitting ? 'TRANSMITTING REQUEST DETAILS...' : 'Confirm & Submit to Admin'}
           </button>
@@ -259,7 +259,7 @@ export default function BookingForm({
           <button
             type="button"
             onClick={onOpenAuth}
-            className="w-full py-4 rounded-xl bg-[#8c6239] text-white text-xs font-bold uppercase tracking-widest hover:bg-[#5c4033] transition-all cursor-pointer"
+            className="w-full py-4 rounded-xl bg-[#8c6239] text-white text-xs font-bold uppercase tracking-widest hover:bg-[#5c4033] hover:scale-[1.015] active:scale-[0.985] transition-all duration-200 cursor-pointer"
           >
             LOGIN TO CONFIRM RESERVATION
           </button>

@@ -9,6 +9,7 @@ import Hero from './components/Hero';
 import MenuDisplay from './components/MenuDisplay';
 import Cart from './components/Cart';
 import AuthModal from './components/AuthModal';
+import ThankYouModal from './components/ThankYouModal';
 import CustomerDashboard from './components/CustomerDashboard';
 
 // Dynamically lazy-loaded heavy sub-views to optimize bundle size and load speed dramatically
@@ -59,6 +60,8 @@ export default function App() {
   // Modal Open Toggles
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isThankYouOpen, setIsThankYouOpen] = useState(false);
+  const [loggedOutName, setLoggedOutName] = useState('');
 
   // Active Toast Status
   const [heroAlert, setHeroAlert] = useState<string | null>(null);
@@ -472,6 +475,9 @@ export default function App() {
   };
 
   const handleLogout = () => {
+    const previousName = currentUser?.name || 'Valued Customer';
+    const wasAdmin = currentUser?.role === 'admin';
+    setLoggedOutName(previousName);
     localStorage.removeItem('gk_auth_token');
     localStorage.removeItem('gk_user');
     setAuthToken(null);
@@ -479,7 +485,12 @@ export default function App() {
     setCart([]);
     setIsCartOpen(false);
     setActiveTab('home');
-    setHeroAlert('🔐 Logged out out of portals. Good day!');
+    if (!wasAdmin) {
+      setIsThankYouOpen(true);
+      setHeroAlert(`Salamat po sa inyong pagtangkilik, ${previousName}! 😊`);
+    } else {
+      setHeroAlert('🔐 Logged out out of portals. Good day!');
+    }
   };
 
   // Filter features
@@ -745,7 +756,7 @@ export default function App() {
         {/* Tracker component removed as per user request */}
 
         {/* -- TAB: ADMIN BOARD CONTROL -- */}
-        {activeTab === 'admin' && (
+        {activeTab === 'admin' && currentUser?.role === 'admin' && (
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
             <Suspense fallback={<DelayedFallback />}>
               <div id="public-admin-banner" className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-2xl flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 shadow-xs">
@@ -879,6 +890,13 @@ export default function App() {
         isOpen={isAuthOpen}
         onClose={() => setIsAuthOpen(false)}
         onLoginSuccess={handleLoginSuccess}
+      />
+
+      {/* 7. LOGOUT THANK YOU FEEDBACK MODAL */}
+      <ThankYouModal
+        isOpen={isThankYouOpen}
+        userName={loggedOutName}
+        onClose={() => setIsThankYouOpen(false)}
       />
 
     </div>

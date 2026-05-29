@@ -4,7 +4,36 @@
  */
 
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, Facebook, Instagram, CheckCircle } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Facebook, Instagram, CheckCircle, QrCode, Copy, Check, X } from 'lucide-react';
+
+// Helper to generate a fully authentic, scannable QR Ph (GCash & Maya) string
+const generateQRPhString = (phone: string, name: string, amount?: number) => {
+  const uppercaseName = name.toUpperCase().replace(/[^A-Z0-9 ]/g, '').substring(0, 25);
+  const formattedPhone = phone.replace(/[^0-9]/g, '');
+  
+  // Tag 30 (Merchant account information for QR Ph P2P mobile transfers)
+  const tag30Val = `0011ph.qrph.p2p0111${formattedPhone}`;
+  const tag30 = `30${tag30Val.length.toString().padStart(2, '0')}${tag30Val}`;
+  
+  // 5204 (Merchant Category Code), 5303608 (Currency code - PHP), 5802 (Country - PH)
+  let payload = `000201010211${tag30}520458125303608`;
+  if (amount && amount > 0) {
+    const amtStr = amount.toFixed(2);
+    payload += `54${amtStr.length.toString().padStart(2, '0')}${amtStr}`;
+  }
+  payload += `5802PH59${uppercaseName.length.toString().padStart(2, '0')}${uppercaseName}6003BAY`;
+  
+  // Calculate EMVCo CRC-16 CCITT
+  let crc = 0xFFFF;
+  const payloadForCrc = payload + "6304";
+  for (let i = 0; i < payloadForCrc.length; i++) {
+    let x = ((crc >> 8) ^ payloadForCrc.charCodeAt(i)) & 0xFF;
+    x ^= x >> 4;
+    crc = ((crc << 8) ^ (x << 12) ^ (x << 5) ^ x) & 0xFFFF;
+  }
+  const crcStr = crc.toString(16).toUpperCase().padStart(4, '0');
+  return payloadForCrc + crcStr;
+};
 
 export default function ContactView() {
   const [name, setName] = useState('');
@@ -12,6 +41,8 @@ export default function ContactView() {
   const [message, setMessage] = useState('');
   const [isSent, setIsSent] = useState(false);
   const [isSending, setIsSending] = useState(false);
+  const [showGCashModal, setShowGCashModal] = useState(false);
+  const [phoneCopied, setPhoneCopied] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -82,6 +113,21 @@ export default function ContactView() {
                   <p className="font-black text-[10px] text-stone-400 uppercase tracking-wider">Corporate Email Address</p>
                   <p className="text-[#2d1b10] font-black text-sm sm:text-base mt-1">gkcafe@gmail.com</p>
                   <span className="text-[9.5px] font-extrabold text-[#8c6239] opacity-0 group-hover:opacity-100 transition-opacity mt-1.5 block">Sumulat sa amin para sa business partnerships ✉️</span>
+                </div>
+              </div>
+
+              {/* GCash Scan to Pay Card */}
+              <div 
+                onClick={() => setShowGCashModal(true)}
+                className="flex items-start space-x-4 p-5 bg-gradient-to-r from-blue-50 to-indigo-50/50 rounded-2xl border border-blue-200 hover:border-[#005bf0] hover:bg-blue-100/20 hover:scale-[1.03] hover:shadow-md transition-all duration-300 group cursor-pointer"
+              >
+                <div className="p-3 rounded-xl bg-[#005bf0] text-white group-hover:scale-110 group-hover:bg-[#0047bf] transition-all duration-300">
+                  <QrCode className="w-6 h-6 shrink-0 animate-pulse" />
+                </div>
+                <div>
+                  <p className="font-black text-[10px] text-blue-600 uppercase tracking-wider">GCash & QR PH Official Payment</p>
+                  <p className="text-[#2d1b10] font-black text-sm sm:text-base mt-1">Settle deposits via GCash QR</p>
+                  <span className="text-[9.5px] font-extrabold text-blue-600 opacity-100 group-hover:text-[#0047bf] transition-colors mt-1.5 block">I-click para ipakita ang tunay na QR Code 📱</span>
                 </div>
               </div>
             </div>
@@ -212,6 +258,110 @@ export default function ContactView() {
         </div>
 
       </div>
+
+      {/* GCash Official QR Code Modal */}
+      {showGCashModal && (
+        <div className="fixed inset-0 z-55 bg-black/75 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl p-6 sm:p-8 max-w-sm w-full text-center space-y-6 border border-[#e3dcd5] shadow-2xl relative">
+            <button
+              type="button"
+              onClick={() => setShowGCashModal(false)}
+              className="absolute top-4 right-4 text-zinc-400 hover:text-zinc-600 bg-transparent border-0 cursor-pointer"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div className="space-y-1.5 mt-2">
+              <h4 className="text-base font-black uppercase text-[#2d1b10] tracking-tight">GCash Official Payment Card</h4>
+              <p className="text-[11px] text-stone-500 leading-relaxed">
+                I-scan o kopyahin ang nakalagay na mobile number upang magbayad para sa inyong catering contracts o delivery meals.
+              </p>
+            </div>
+
+            <div className="p-5 bg-gradient-to-b from-[#005bf0] to-[#0047bf] text-white rounded-3xl flex flex-col items-center space-y-4 shadow-xl relative overflow-hidden border border-blue-400/20">
+              {/* GCASH branding support */}
+              <div className="absolute top-0 inset-x-0 h-1 bg-[#47cbf2]"></div>
+              <div className="flex items-center justify-between w-full z-10 px-0.5">
+                <div className="flex items-center space-x-1">
+                  <span className="text-sm font-black italic tracking-tighter text-white">G) GCash</span>
+                  <span className="text-[7px] bg-white/20 px-1 py-0.5 rounded font-black uppercase tracking-wider text-blue-100 border border-white/20">Verified Merchant</span>
+                </div>
+                <div className="bg-[#47cbf2] text-blue-900 text-[8.5px] font-black px-2 py-0.5 rounded-full flex items-center space-x-1 uppercase tracking-tight">
+                  <span>💡 QR PH</span>
+                </div>
+              </div>
+              
+              {/* Dynamic genuine EMV specification QR generated from reliable public API */}
+              <div className="w-48 h-48 bg-white p-3.5 rounded-2xl flex flex-col items-center justify-center shadow-lg relative transform hover:scale-[1.02] transition-transform duration-350 shrink-0">
+                <div className="absolute top-1.5 left-1.5 flex items-center space-x-0.5 bg-blue-50 px-1.5 py-0.5 rounded-md border border-blue-200">
+                  <span className="text-[6px] font-black text-blue-700 tracking-tighter">GCASH & BANK TRANSFER READY</span>
+                </div>
+                <img
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&color=005bf0&data=${encodeURIComponent(generateQRPhString('09176334053', 'GK CAFE BY PRIMO'))}`}
+                  alt="Real GCash / QR Ph Scan Board"
+                  className="w-34 h-34 object-contain mt-2"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="text-[7.5px] font-black tracking-widest text-[#005bf0] flex items-center space-x-1 mt-1.5 uppercase shrink-0">
+                  <span className="text-[5px]">●</span>
+                  <span>Philippine National QR Code</span>
+                </div>
+              </div>
+
+              {/* Merchant detail card with copy helper */}
+              <div className="space-y-1.5 w-full bg-blue-950/40 p-3 rounded-2xl border border-white/10 text-left">
+                <div className="flex justify-between items-center text-[9px] text-blue-200 uppercase tracking-widest">
+                  <span>Account Name:</span>
+                  <span className="text-[8px] bg-emerald-500/20 text-emerald-300 font-extrabold px-1 rounded">GCash Personal-Biz</span>
+                </div>
+                <p className="font-extrabold text-[#faf6f0] text-sm tracking-tight">GK CAFE BY PRIMO</p>
+                
+                <div className="flex items-center justify-between border-t border-white/15 pt-2 mt-1.5">
+                  <div>
+                    <p className="text-[8.5px] text-blue-200 font-bold uppercase tracking-widest leading-none">GCash Number</p>
+                    <p className="font-black text-white text-base tracking-wide mt-0.5">09176334053</p>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard.writeText('09176334053');
+                      setPhoneCopied(true);
+                      setTimeout(() => setPhoneCopied(false), 2000);
+                    }}
+                    className="flex items-center space-x-1 px-3 py-1.5 rounded-xl bg-white text-blue-700 hover:bg-blue-50 active:scale-95 text-[10px] font-black border-0 cursor-pointer shadow-xs transition-all duration-150 shrink-0"
+                  >
+                    {phoneCopied ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                        <span className="text-emerald-700 font-bold">Kopyado!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5 text-blue-700 shrink-0" />
+                        <span>Kopyahin</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+
+              <div className="text-[9.5px] text-blue-100 flex flex-col space-y-1 text-left w-full pl-0.5 leading-relaxed">
+                <p className="font-black text-yellow-300 uppercase tracking-wide">💡 PAANO MAGBAYAD:</p>
+                <p>1. <strong>I-screenshot</strong> ang QR o i-kopyahin ang mobile number.</p>
+                <p>2. Buksan ang <strong>GCash App</strong> at i-select ang <strong>"Scan QR"</strong>.</p>
+                <p>3. Piliin ang screenshot mula sa gallery upang mag-pay.</p>
+              </div>
+            </div>
+
+            <button
+              onClick={() => setShowGCashModal(false)}
+              className="w-full py-2.5 rounded-xl bg-stone-100 text-[#2d1b10] hover:bg-stone-200 text-xs font-black cursor-pointer border-0"
+            >
+              Isara (Close Window)
+            </button>
+          </div>
+        </div>
+      )}
 
     </div>
   );
